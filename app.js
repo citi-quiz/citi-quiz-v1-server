@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 app.use(bodyParser.json());
 app.use(cookieParser());
 const corsConfig = {
-    origin: '*',
+    origin: 'http://localhost:8100',
     credentials: true,
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"]
 };
@@ -59,10 +59,10 @@ const port = process.env.PORT || 8080;
  */
 // ** LINK - https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/#:~:text=To%20start%20your%20https%20server,the%20file)%20on%20the%20terminal.&text=or%20in%20your%20browser%2C%20by,to%20https%3A%2F%2Flocalhost%3A8000%20.
 
-const options = {
-    key: fs.readFileSync('./.cert/key.pem'),
-    cert: fs.readFileSync('./.cert/cert.pem')
-};
+// const options = {
+//     key: fs.readFileSync('./.cert/key.pem'),
+//     cert: fs.readFileSync('./.cert/cert.pem')
+// };
 // ?
 
 
