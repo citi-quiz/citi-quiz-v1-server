@@ -12,5 +12,23 @@
     "nodemon": "^2.0.21",
     "pigcolor": "^1.0.4",
     "uuid": "^9.0.0"
-  }
+  },
+  "name": "citiquiz-server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/citi-quiz/citi-quiz-v1-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/citi-quiz/citi-quiz-v1-server/issues"
+  },
+  "homepage": "https://github.com/citi-quiz/citi-quiz-v1-server#readme",
+  "description": ""
 }
