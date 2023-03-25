@@ -10,10 +10,24 @@ var nodemailer = require('nodemailer');
 
 
 const sendEmail = (to, subject, msg, html) => {
-    var transporter = nodemailer.createTransport('smtps://thedot.clan@zohomail.in:8gQp8C2zgStm7uz@smtp.zoho.in');
+    // var transporter = nodemailer.createTransport('smtps://citiquiz@hotmail.com:citiciti2023@smtp.hotmail.com');
+
+    var transporter = nodemailer.createTransport({
+        host: "smtp-mail.outlook.com", // hostname
+        secureConnection: false, // TLS requires secureConnection to be false
+        port: 587, // port for secure SMTP
+        tls: {
+            ciphers: 'SSLv3'
+        },
+        auth: {
+            user: 'citiquiz@hotmail.com',
+            pass: 'citiciti2023'
+        }
+    });
+
 
     var mailOptions = {
-        from: 'thedot.clan@zohomail.in',
+        from: 'citiquiz@hotmail.com',
         to: to,
         subject: subject,
         text: msg,
