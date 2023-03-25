@@ -40,6 +40,10 @@ const port = process.env.PORT || 8080;
 // ************************ Import all routes here **********************
 
 
+// ?? USER
+
+const userRoute = require("./routers/user");
+
 // **********************************************************************
 
 
@@ -59,10 +63,11 @@ const port = process.env.PORT || 8080;
  */
 // ** LINK - https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/#:~:text=To%20start%20your%20https%20server,the%20file)%20on%20the%20terminal.&text=or%20in%20your%20browser%2C%20by,to%20https%3A%2F%2Flocalhost%3A8000%20.
 
-// const options = {
-//     key: fs.readFileSync('./.cert/key.pem'),
-//     cert: fs.readFileSync('./.cert/cert.pem')
-// };
+
+const options = {
+    key: fs.readFileSync('./.cert/key.pem'),
+    cert: fs.readFileSync('./.cert/cert.pem')
+};
 // ?
 
 
@@ -158,16 +163,19 @@ const WEB = '/api/web';
 
 // ***************************************************************************** 
 
+app.use(WEB, userRoute);
+
+
 
 // TODO: Starting HTTPs Node Server
 // ****************************************************************** Node Server
-app.listen(port, () => {
-    Pig.server(port);
-});
+// app.listen(port, () => {
+//     Pig.server(port);
+// });
 
 // exports.app = functions.https.onRequest(app);
 
-// https.createServer(options, app)
-//     .listen(port, function() {
-//         Pig.server(port);
-//     });
+https.createServer(options, app)
+    .listen(port, function() {
+        Pig.server(port);
+    });
