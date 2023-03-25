@@ -143,6 +143,12 @@ app.post("/view/token", (req, res) => {
 });
 
 
+app.post("/user/auth/check", (req, res) => {
+    console.log("USer Auth : ", req.body.token.value);
+});
+
+
+
 //********************* All Route Middlewares **********************************
 // ? API Mode
 const MOBILE = '/api/mobile';
