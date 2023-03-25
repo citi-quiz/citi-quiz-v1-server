@@ -1,36 +1,70 @@
 {
 
     "name": "citiquiz-server",
+
     "version": "1.0.0",
+
     "main": "app.js",
-    "devDependencies": {},
+
     "scripts": {
+
         "test": "echo \"Error: no test specified\" && exit 1",
+
         "start": "node app.js"
+
     },
+
     "repository": {
+
         "type": "git",
+
         "url": "git+https://github.com/citi-quiz/citi-quiz-v1-server.git"
+
     },
+
     "author": "",
+
     "license": "ISC",
+
     "bugs": {
+
         "url": "https://github.com/citi-quiz/citi-quiz-v1-server/issues"
+
     },
+
     "homepage": "https://github.com/citi-quiz/citi-quiz-v1-server#readme",
+
     "description": "",
+
     "dependencies": {
+
         "body-parser": "^1.20.2",
+
         "connect-mongodb-session": "^3.1.1",
+
         "cookie-parser": "^1.4.6",
+
         "cors": "^2.8.5",
+
         "dotenv": "^16.0.3",
+
         "express": "^4.18.2",
+
         "express-session": "^1.17.3",
+
         "https": "^1.0.0",
+
         "mongoose": "^7.0.2",
+
+        "nodemailer": "^6.9.1",
+
         "nodemon": "^2.0.21",
+
         "pigcolor": "^1.0.4",
+
         "uuid": "^9.0.0"
+
     }
+
 }
+
