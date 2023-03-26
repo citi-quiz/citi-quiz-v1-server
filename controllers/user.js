@@ -18,8 +18,7 @@ exports.verifyUserCode = (req, res) => {
     console.log("code", userCode);
 
     User.findOne({ verificationCode: userCode })
-        .then(async(err, thatUser) => {
-            console.log("theUser - ", thatUser);
+        .then(async(thatUser, err) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -31,17 +30,29 @@ exports.verifyUserCode = (req, res) => {
                 })
             } else {
                 thatUser.email_verified = "True"
-                const newUser = await thatUser.save();
-                return res.json({
-                    data: thatUser
-                })
+                thatUser.save()
+                    .then((suser, err) => {
+                        if (err) {
+                            return res.status(400).json({
+                                error: err
+                            })
+                        }
+                        console.log("suser - ", suser);
+                        return res.json({
+                            user: suser
+                        })
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+
             }
         })
 
 
 
 }
-
 
 
 exports.createUser = async(req, res) => {
@@ -108,5 +119,11 @@ exports.createUser = async(req, res) => {
             })
         }
     })
+
+}
+
+
+exports.resendVerificationCode = (req, res) => {
+    Pig.box("USER: Resend Verification Code");
 
 }
