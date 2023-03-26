@@ -6,8 +6,9 @@ var nodemailer = require('nodemailer');
 
 exports.isUserExist = (req, res) => {
     Pig.box("USER: Exist");
-
-
+    return res.json({
+        user: "NO"
+    })
 }
 
 
@@ -16,27 +17,42 @@ exports.verifyUserCode = (req, res) => {
     const userCode = req.body.data.code;
     console.log("code", userCode);
 
-    User.findOne({ verificationCode: userCode }, async(err, user) => {
-        if (err) {
-            return res.status(400).json({
-                error: err
-            })
-        }
-        if (!user) {
-            return res.json({
-                msg: "User code is wrong"
-            })
-        } else {
-            user.email_verified = "True"
-            const newUser = await user.save();
-            return res.json({
-                data: user
-            })
-        }
-    });
+    User.findOne({ verificationCode: userCode })
+        .then(async(thatUser, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            if (!thatUser) {
+                return res.json({
+                    msg: "User code is wrong"
+                })
+            } else {
+                thatUser.email_verified = "True"
+                thatUser.save()
+                    .then((suser, err) => {
+                        if (err) {
+                            return res.status(400).json({
+                                error: err
+                            })
+                        }
+                        console.log("suser - ", suser);
+                        return res.json({
+                            user: suser
+                        })
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+
+            }
+        })
+
+
 
 }
-
 
 
 exports.createUser = async(req, res) => {
@@ -103,5 +119,11 @@ exports.createUser = async(req, res) => {
             })
         }
     })
+
+}
+
+
+exports.resendVerificationCode = (req, res) => {
+    Pig.box("USER: Resend Verification Code");
 
 }

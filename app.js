@@ -76,7 +76,7 @@ const options = {
 // ******************************************************************* DB Connection
 mongoose.set('strictQuery', true);
 mongoose
-    .connect(process.env.DATABASE_PRODUCTION, {
+    .connect(process.env.DATABASE_STAGING, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
@@ -90,7 +90,7 @@ mongoose
 // ** Mongo DB Store configuraton for session storage
 const MongoDBStore = require('connect-mongodb-session')(session);
 var store = new MongoDBStore({
-    uri: 'mongodb+srv://helpcitiquiz:citiciti@cluster0.hzfvfpa.mongodb.net/?retryWrites=true&w=majority',
+    uri: 'mongodb://127.0.0.1:27017/citiquiz',
     collection: 'mySessions'
 });
 
@@ -148,9 +148,6 @@ app.post("/view/token", (req, res) => {
 });
 
 
-app.post("/user/auth/check", (req, res) => {
-    console.log("USer Auth : ", req.body.token.value);
-});
 
 
 
