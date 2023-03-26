@@ -1,5 +1,8 @@
 const Pig = require('pigcolor');
 const User = require('../modules/user');
+const { v4: uuidv4 } = require('uuid');
+var nodemailer = require('nodemailer');
+
 
 exports.isUserExist = (req, res) => {
     Pig.box("USER: Exist");
@@ -10,21 +13,93 @@ exports.isUserExist = (req, res) => {
 
 exports.verifyUserCode = (req, res) => {
     Pig.box("USER: Code Verification");
+    const userCode = req.body.data.code;
+    console.log("code", userCode);
 
-
-}
-
-exports.createUser = (req, res) => {
-    Pig.box("USER: Create");
-
-    const newUser = new User();
-    newUser.name = req.body.name;
-    newUser.email = req.body.email;
-    newUser.password = req.body.password;
-    newUser.save((err, nuser) => {
+    User.findOne({ verificationCode: userCode }, async(err, user) => {
         if (err) {
             return res.status(400).json({
                 error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                msg: "User code is wrong"
+            })
+        } else {
+            user.email_verified = "True"
+            const newUser = await user.save();
+            return res.json({
+                data: user
+            })
+        }
+    });
+
+}
+
+
+
+exports.createUser = async(req, res) => {
+    Pig.box("USER: Create");
+
+    const vcode = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)
+
+    const newUser = new User();
+    newUser.name = req.body.data.name;
+    newUser.email = req.body.data.email;
+    newUser.password = req.body.data.password;
+    newUser.email_verified = "false";
+    newUser.verificationCode = vcode
+
+    const to = req.body.data.email;
+    const subject = "citi-quiz.com - Verification Code"
+    const text = `Hi ${req.body.data.name} Your Verification Code is ` + vcode
+    const html = ""
+
+    console.log(req.body.data);
+
+
+
+
+
+    const nUser = await newUser.save();
+
+
+
+    var transporter = nodemailer.createTransport({
+        host: "smtp-mail.outlook.com", // hostname
+        secureConnection: false, // TLS requires secureConnection to be false
+        port: 587, // port for secure SMTP
+        tls: {
+            ciphers: 'SSLv3'
+        },
+        auth: {
+            user: 'citiquiz@hotmail.com',
+            pass: 'citiciti2023'
+        }
+    });
+
+    var mailOptions = {
+        from: 'citiquiz@hotmail.com',
+        to: to,
+        subject: subject,
+        text: text,
+        html: ""
+    };
+
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (info) {
+            return res.json({
+                msg: "To Verification Page",
+                redirect: true,
+                user: nUser
+            })
+        }
+        console.log("INFOR , ERROR ", info, error);
+        if (error) {
+            return res.json({
+                msg: "Error Page",
+                redirect: false
             })
         }
     })

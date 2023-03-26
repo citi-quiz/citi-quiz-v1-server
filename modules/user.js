@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const { uuidv4 } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 
 const userSchema = new mongoose.Schema({
 
@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
     salt: String,
 
     email_verified: {
+        type: String,
+        required: true
+    },
+
+    verificationCode: {
         type: String,
         required: true
     }
