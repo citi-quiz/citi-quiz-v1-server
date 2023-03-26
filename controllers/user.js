@@ -6,8 +6,9 @@ var nodemailer = require('nodemailer');
 
 exports.isUserExist = (req, res) => {
     Pig.box("USER: Exist");
-
-
+    return res.json({
+        user: "NO"
+    })
 }
 
 
@@ -16,24 +17,28 @@ exports.verifyUserCode = (req, res) => {
     const userCode = req.body.data.code;
     console.log("code", userCode);
 
-    User.findOne({ verificationCode: userCode }, async(err, user) => {
-        if (err) {
-            return res.status(400).json({
-                error: err
-            })
-        }
-        if (!user) {
-            return res.json({
-                msg: "User code is wrong"
-            })
-        } else {
-            user.email_verified = "True"
-            const newUser = await user.save();
-            return res.json({
-                data: user
-            })
-        }
-    });
+    User.findOne({ verificationCode: userCode })
+        .then(async(err, thatUser) => {
+            console.log("theUser - ", thatUser);
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            if (!thatUser) {
+                return res.json({
+                    msg: "User code is wrong"
+                })
+            } else {
+                thatUser.email_verified = "True"
+                const newUser = await thatUser.save();
+                return res.json({
+                    data: thatUser
+                })
+            }
+        })
+
+
 
 }
 
