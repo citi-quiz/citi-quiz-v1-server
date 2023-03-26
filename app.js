@@ -169,13 +169,13 @@ app.use(WEB, userRoute);
 
 // TODO: Starting HTTPs Node Server
 // ****************************************************************** Node Server
-// app.listen(port, () => {
-//     Pig.server(port);
-// });
+app.listen(port, () => {
+    Pig.server(port);
+});
 
 // exports.app = functions.https.onRequest(app);
 
-https.createServer(options, app)
-    .listen(port, function() {
-        Pig.server(port);
-    });
+// https.createServer(options, app)
+//     .listen(port, function() {
+//         Pig.server(port);
+//     });
