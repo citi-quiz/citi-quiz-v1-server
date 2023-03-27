@@ -41,6 +41,10 @@ const setsSchema = new mongoose.Schema({
     setikes: {
         type: Number,
         default: 0
+    },
+
+    setQuestions: {
+        type: [String]
     }
 
 
