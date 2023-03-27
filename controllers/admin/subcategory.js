@@ -23,7 +23,6 @@ exports.createSetCategory = (req, res) => {
         });
 }
 
-
 exports.updateSetCategory = (req, res) => {
     Pig.box("UDATE: Set Category");
     SubCategory.findById({ _id: req.body.cateid })
@@ -72,5 +71,42 @@ exports.deleteSetCategory = (req, res) => {
 
 exports.getAllSubCategory = (req, res) => {
     Pig.box("GET ALL: Sub Category");
-    SubCategory.find();
+    SubCategory.find({})
+        .then((allsubcategory, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                cate: allsubcategory
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
+
+}
+
+exports.getASubCategory = (req, res) => {
+    Pig.box("GET A: Sub Category");
+    const subcategoryId = req.params.subcategoryId;
+    SubCategory.findById({ _id: subcategoryId })
+        .then((subcategory, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                cate: subcategory
+            })
+        })
+        .catch(err => {
+            return res.status(400).json({
+                error: err
+            })
+        });
 }

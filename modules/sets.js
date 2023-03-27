@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { ObjectId } = mongoose.Schema;
 
 
 const setsSchema = new mongoose.Schema({
@@ -22,8 +22,9 @@ const setsSchema = new mongoose.Schema({
     },
 
     setCategory: {
-        type: String,
-        required: true
+        type: ObjectId,
+        required: true,
+        ref: "SetCategory"
     },
 
     setTitle: {
@@ -50,7 +51,7 @@ const setsSchema = new mongoose.Schema({
 
 
 
-});
+}, { timestamps: true });
 
 
 module.exports = mongoose.model("Sets", setsSchema);
