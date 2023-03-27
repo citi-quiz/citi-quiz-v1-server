@@ -150,9 +150,3 @@ exports.getAllSetsByCategory = (req, res) => {
             })
         });
 }
-
-
-exports.createQuestions = () => {
-    Pig.box("CREATE: Questions");
-
-}

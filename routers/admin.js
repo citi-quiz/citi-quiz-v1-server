@@ -1,6 +1,7 @@
 const express = require('express');
 const { createSetCategory, updateSetCategory, deleteSetCategory, getAllSubCategory, getASubCategory } = require('../controllers/admin/subcategory');
 const { createSets, updateSets, deleteSets, getAllSets, getASets, getAllSetsByCategory } = require('../controllers/sets');
+const { createQuestion } = require('../controllers/questions');
 const route = express.Router();
 
 // ******************** Sub Category **********************
@@ -21,5 +22,11 @@ route.delete("/sets/delete/:sId", deleteSets);
 route.get("/sets/get/all", getAllSets);
 route.get("/sets/get/a/:sId", getASets);
 route.get("/sets/get/all/by/category/:categoryId", getAllSetsByCategory);
+
+
+
+// ******************** Question *************************
+route.post("/question/create", createQuestion);
+
 
 module.exports = route;
