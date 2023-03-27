@@ -28,3 +28,45 @@ exports.createQuestion = (req, res) => {
             })
         })
 }
+
+exports.getAllQuestions = (req, res) => {
+    Pig.box("GET ALL: Questions");
+    Question.find({}).then((allquestion, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                allquestion: allquestion
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
+}
+
+exports.getAQuestion = (req, res) => {
+    Pig.box("GET A: Question");
+    Question.findById({ _id: req.params.qId }).then((aquestion, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                allquestion: aquestion
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
+
+}
+
+
+// TODO: All Mail Queries Here
