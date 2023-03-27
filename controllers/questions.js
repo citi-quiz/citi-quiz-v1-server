@@ -70,3 +70,27 @@ exports.getAQuestion = (req, res) => {
 
 
 // TODO: All Mail Queries Here
+
+exports.getQuestionAsSet = (req, res) => {
+    Pig.box("GET ALL: Generate Question ");
+
+
+    const setId = req.params.setId;
+    Question.find({ setUnder: setId }).limit(5)
+        .then((question, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                allquestion: question
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
+
+}

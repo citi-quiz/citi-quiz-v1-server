@@ -1,7 +1,7 @@
 const express = require('express');
 const { createSetCategory, updateSetCategory, deleteSetCategory, getAllSubCategory, getASubCategory } = require('../controllers/admin/subcategory');
 const { createSets, updateSets, deleteSets, getAllSets, getASets, getAllSetsByCategory } = require('../controllers/sets');
-const { createQuestion, getAllQuestions, getAQuestion } = require('../controllers/questions');
+const { createQuestion, getAllQuestions, getAQuestion, getQuestionAsSet } = require('../controllers/questions');
 const route = express.Router();
 
 // ******************** Sub Category **********************
@@ -30,6 +30,11 @@ route.post("/question/create", createQuestion);
 
 
 route.get("/question/get/all", getAllQuestions);
-route.get("/sets/get/a/:qId", getAQuestion);
+route.get("/question/get/a/:qId", getAQuestion);
+
+
+// ?? Special Queries
+route.get("/question/get/set/:setId/generate", getQuestionAsSet);
+
 
 module.exports = route;
