@@ -93,6 +93,48 @@ exports.deleteSets = (req, res) => {
         });
 }
 
+
+exports.getAllSets = (req, res) => {
+    Pig.box("GET All: Sets");
+    Sets.find({})
+        .then((allSets, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            return res.json({
+                sets: allSets
+            })
+        })
+        .catch(err => {
+            return res.status(400).json({
+                error: err
+            });;
+        })
+}
+
+exports.getASets = (req, res) => {
+    Pig.box("GET A: Sets");
+    Sets.findById({ _id: req.params.sId })
+        .then((allSets, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            return res.json({
+                sets: allSets
+            })
+        })
+        .catch(err => {
+            return res.status(400).json({
+                error: err
+            });;
+        })
+}
+
+
 exports.createQuestions = () => {
     Pig.box("CREATE: Questions");
 
