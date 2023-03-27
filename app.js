@@ -43,6 +43,7 @@ const port = process.env.PORT || 8080;
 // ?? USER
 
 const userRoute = require("./routers/user");
+const adminRoute = require("./routers/admin");
 
 // **********************************************************************
 
@@ -76,7 +77,7 @@ const options = {
 // ******************************************************************* DB Connection
 mongoose.set('strictQuery', true);
 mongoose
-    .connect(process.env.DATABASE_PRODUCTION, {
+    .connect(process.env.DATABASE_STAGING, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
@@ -90,7 +91,7 @@ mongoose
 // ** Mongo DB Store configuraton for session storage
 const MongoDBStore = require('connect-mongodb-session')(session);
 var store = new MongoDBStore({
-    uri: 'mongodb+srv://helpcitiquiz:citiciti@cluster0.hzfvfpa.mongodb.net/?retryWrites=true&w=majority',
+    uri: 'mongodb://127.0.0.1:27017/citiquiz',
     collection: 'mySessions'
 });
 
@@ -161,7 +162,7 @@ const WEB = '/api/web';
 // ***************************************************************************** 
 
 app.use(WEB, userRoute);
-
+app.use(WEB, adminRoute);
 
 
 // TODO: Starting HTTPs Node Server
