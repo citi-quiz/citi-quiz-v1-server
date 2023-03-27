@@ -30,7 +30,6 @@ exports.createSets = (req, res) => {
         })
 }
 
-
 exports.updateSets = (req, res) => {
     Pig.box("UPDATE: Sets");
     Sets.findById({ _id: req.body.sId })
@@ -72,7 +71,6 @@ exports.updateSets = (req, res) => {
         });
 }
 
-
 exports.deleteSets = (req, res) => {
     Pig.box("DELETE: Sets");
     Sets.findByIdAndDelete({ _id: req.params.sId })
@@ -92,7 +90,6 @@ exports.deleteSets = (req, res) => {
             });
         });
 }
-
 
 exports.getAllSets = (req, res) => {
     Pig.box("GET All: Sets");
@@ -132,6 +129,26 @@ exports.getASets = (req, res) => {
                 error: err
             });;
         })
+}
+
+exports.getAllSetsByCategory = (req, res) => {
+    Pig.box("GET ALL BY: Category");
+    Sets.find({ setCategory: req.params.categoryId })
+        .then((allSets, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            return res.json({
+                allSets: allSets
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
 }
 
 
