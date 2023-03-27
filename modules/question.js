@@ -20,9 +20,14 @@ const questionsSchema = new mongoose.Schema({
         required: true
     },
 
+    questionChoices: {
+        type: [Object], // [{answerId: 2681, answer: "Answer"},{answerId: 8940, answer: "Answer"},{answerId: 4895, answer: "Answer"},{answerId: 5699, answer: "Answer"},]
+        required: true
+    },
+
     questionAnswer: {
-        type: [ObjectId],
-        ref: "Ans"
+        type: [Object], //{answerId: 4895, answer: "Answer"}
+        required: true
     },
 
 
