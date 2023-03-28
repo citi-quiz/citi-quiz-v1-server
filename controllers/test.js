@@ -1,10 +1,11 @@
 const Pig = require('pigcolor');
 const Test = require('../modules/test');
 const { v4: uuidv4 } = require('uuid');
+const Question = require('../modules/question');
 
 
 
-exports.initializeTest = (req, res) => {
+exports.initializeTest = async(req, res) => {
     Pig.box("Initialize: Test");
 
 
@@ -12,29 +13,83 @@ exports.initializeTest = (req, res) => {
 
     const newTest = new Test();
     newTest.testId = uuidv4();
-    newTest.setId = req.body.setId;
-    newTest.userId = req.body.userId;
-    newTest.questionId = req.body.questionId;
-    newTest.score = "0";
-    newTest.rank = "0";
-    newTest.result = "Init";
-    newTest.review = "Under Review";
-    newTest.saved = true;
-    newTest.save().then((test, err) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                })
-            }
-            return res.json({
-                allTest: test
-            })
-        })
-        .catch((err) => {
+
+    const testId = req.body.testId;
+    const setId = req.body.setId;
+    const userId = req.body.userId;
+    const questionSet = req.body.questionId;
+
+
+    const questionIds = [];
+    const answerIds = [];
+
+    // All Scores and Results
+    const result = 0;
+    const score = 0;
+
+    await questionSet.map((set, i) => {
+        // console.log("Question - ", set);
+        questionIds.push(set.qid);
+        answerIds.push(set.ansId);
+
+    });
+
+    let sortableQuestionSet = [];
+    answerIds.sort((a, b) => parseFloat(a.answerId) - parseFloat(b.answerId));
+    // Here fix the sorting issue
+    // console.log(answerIds);
+
+    Question.find().where('_id').in(questionIds).then(async(questions, err) => {
+        if (err) {
             return res.status(400).json({
                 error: err
             })
+        }
+
+        await questions.map((q, i) => {
+            console.log("q", q.questionAnswer[0].answerId);
+            console.log("a", answerIds[i].answerId);
+            if (q.questionAnswer[0].answerId === answerIds[i].answerId) {
+                console.log("Scored");
+            }
         });
+
+
+
+        return res.json({
+            questions: questions
+        })
+
+    });
+
+
+
+
+
+
+    // newTest.setId = req.body.setId;
+    // newTest.userId = req.body.userId;
+    // newTest.questionId = req.body.questionId;
+    // newTest.score = "0";
+    // newTest.rank = "0";
+    // newTest.result = "Init";
+    // newTest.review = "Under Review";
+    // newTest.saved = true;
+    // newTest.save().then((test, err) => {
+    //         if (err) {
+    //             return res.status(400).json({
+    //                 error: err
+    //             })
+    //         }
+    //         return res.json({
+    //             allTest: test
+    //         })
+    //     })
+    //     .catch((err) => {
+    //         return res.status(400).json({
+    //             error: err
+    //         })
+    //     });
 };
 
 
