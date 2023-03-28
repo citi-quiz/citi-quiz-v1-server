@@ -44,7 +44,7 @@ const testSchema = new mongoose.Schema({
         required: true
     },
 
-    save: {
+    saved: {
         type: Boolean,
         required: true
     }
