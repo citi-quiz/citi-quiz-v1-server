@@ -4,11 +4,11 @@ const { v4: uuidv4 } = require('uuid');
 const Question = require('../modules/question');
 
 
-
+// TODO: 
 exports.initializeTest = async(req, res) => {
     Pig.box("Initialize: Test");
 
-
+    const SCORE_VALUE = 5;
     // TODO: Login To Calculate Score and Verify Answers
 
     const newTest = new Test();
@@ -22,10 +22,10 @@ exports.initializeTest = async(req, res) => {
 
     const questionIds = [];
     const answerIds = [];
-
     // All Scores and Results
     const result = 0;
     const score = 0;
+
 
     await questionSet.map((set, i) => {
         // console.log("Question - ", set);
@@ -45,20 +45,23 @@ exports.initializeTest = async(req, res) => {
                 error: err
             })
         }
-
+        let score = 0;
         await questions.map((q, i) => {
             console.log("q", q.questionAnswer[0].answerId);
             console.log("a", answerIds[i].answerId);
             if (q.questionAnswer[0].answerId === answerIds[i].answerId) {
                 console.log("Scored");
+                score = score + SCORE_VALUE;
             }
+
         });
 
 
-
         return res.json({
-            questions: questions
+            questions: questions,
+            score: score
         })
+
 
     });
 
