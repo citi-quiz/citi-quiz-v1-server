@@ -97,7 +97,8 @@ exports.getQuestionAsSet = (req, res) => {
 
 
     const setId = req.params.setId;
-    Question.find({ setUnder: setId }).limit(5)
+    var random = Math.ceil(Math.random() * (13 - 1) + 1);
+    Question.find({ setUnder: setId }).skip(random).limit(5)
         .then((question, err) => {
             if (err) {
                 return res.status(400).json({

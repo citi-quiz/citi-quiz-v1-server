@@ -6,6 +6,10 @@ const { v4: uuidv4 } = require('uuid');
 
 exports.initializeTest = (req, res) => {
     Pig.box("Initialize: Test");
+
+
+    // TODO: Login To Calculate Score and Verify Answers
+
     const newTest = new Test();
     newTest.testId = uuidv4();
     newTest.setId = req.body.setId;

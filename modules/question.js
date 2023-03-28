@@ -16,7 +16,6 @@ const questionsSchema = new mongoose.Schema({
 
     questionName: {
         type: String,
-        maxLength: 32,
         trim: true
     },
 
