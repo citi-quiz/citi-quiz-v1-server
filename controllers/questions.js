@@ -71,6 +71,27 @@ exports.getAQuestion = (req, res) => {
 
 // TODO: All Mail Queries Here
 
+exports.getQuestionsAllInSet = (req, res) => {
+    Pig.box("GET ALL: Questions under Sets");
+    Question.find({ setUnder: req.params.setId })
+        .then((question, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                allquestion: question
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
+
+}
+
 exports.getQuestionAsSet = (req, res) => {
     Pig.box("GET ALL: Generate Question ");
 
@@ -94,3 +115,12 @@ exports.getQuestionAsSet = (req, res) => {
         });
 
 }
+
+
+exports.getQuestionEvaluate = () => {
+    Pig.box("GET: Evaluated Questions");
+
+}
+
+
+exports.getQus
