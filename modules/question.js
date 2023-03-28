@@ -9,6 +9,11 @@ const questionsSchema = new mongoose.Schema({
         unique: true
     },
 
+    setUnder: {
+        type: String,
+        required: true
+    },
+
     questionName: {
         type: String,
         maxLength: 32,
