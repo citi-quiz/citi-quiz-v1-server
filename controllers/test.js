@@ -53,14 +53,33 @@ exports.initializeTest = async(req, res) => {
                 console.log("Scored");
                 score = score + SCORE_VALUE;
             }
-
         });
 
-
-        return res.json({
-            questions: questions,
-            score: score
-        })
+        newTest.setId = req.body.setId;
+        newTest.userId = req.body.userId;
+        newTest.questionId = req.body.questionId;
+        newTest.score = score;
+        newTest.rank = "0";
+        newTest.result = "Pass";
+        newTest.review = "Under Review";
+        newTest.saved = true;
+        newTest.save().then((test, err) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+                return res.json({
+                    allTest: test,
+                    questions: questions,
+                    score: score
+                })
+            })
+            .catch((err) => {
+                return res.status(400).json({
+                    error: err
+                })
+            });
 
 
     });
@@ -70,29 +89,7 @@ exports.initializeTest = async(req, res) => {
 
 
 
-    // newTest.setId = req.body.setId;
-    // newTest.userId = req.body.userId;
-    // newTest.questionId = req.body.questionId;
-    // newTest.score = "0";
-    // newTest.rank = "0";
-    // newTest.result = "Init";
-    // newTest.review = "Under Review";
-    // newTest.saved = true;
-    // newTest.save().then((test, err) => {
-    //         if (err) {
-    //             return res.status(400).json({
-    //                 error: err
-    //             })
-    //         }
-    //         return res.json({
-    //             allTest: test
-    //         })
-    //     })
-    //     .catch((err) => {
-    //         return res.status(400).json({
-    //             error: err
-    //         })
-    //     });
+
 };
 
 
