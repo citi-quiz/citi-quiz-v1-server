@@ -173,7 +173,35 @@ exports.createUser = async(req, res) => {
 
 exports.loginUser = async(req, res) => {
     Pig.box("USER: Login");
-    console.log(res.body);
+    console.log(req.body.data);
+    User.findOne({ email: req.body.data.email }).then((user, err) => {
+            console.log("user, err", user, err);
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            if (!user) {
+                return res.json({
+                    userMsg: "User doesn't exist"
+                });
+            } else if (!user.authenticate(req.body.data.password)) {
+                return res.json({
+                    userMsg: "You have entered wrong password"
+                });
+            } else if (user.authenticate(req.body.data.password)) {
+                return res.json({
+                    user: user,
+                    userMsg: "AUTH_YES"
+                })
+            }
+
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
 }
 
 
