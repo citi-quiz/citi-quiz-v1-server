@@ -4,6 +4,12 @@ const { v4: uuidv4 } = require('uuid');
 
 const userSchema = new mongoose.Schema({
 
+    user_temp_id: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
     name: {
         type: String,
         maxLength: 32,

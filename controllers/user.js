@@ -8,9 +8,42 @@ const Favorite = require('../modules/favorite');
 
 exports.isUserExist = (req, res) => {
     Pig.box("USER: Exist");
-    return res.json({
-        user: "NO"
-    })
+
+    console.log(req.body);
+    if (req.body.token.value === "null") {
+        return res.json({
+            userIs: "AUTH_NO"
+        });
+    }
+
+    User.findById({ _id: req.body.token.value })
+        .then((user, err) => {
+            console.log("user, err", user, err);
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            if (!user) {
+                return res.json({
+                    userIs: "AUTH_NO"
+                });
+            }
+            return res.json({
+                user: user,
+                userIs: "AUTH_YES"
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        })
+
+
+    // return res.json({
+    //     user: "NO"
+    // });
 }
 
 
@@ -67,6 +100,7 @@ exports.createUser = async(req, res) => {
     newUser.name = req.body.data.name;
     newUser.email = req.body.data.email;
     newUser.password = req.body.data.password;
+    newUser.user_temp_id = uuidv4();
     newUser.email_verified = "false";
     newUser.verificationCode = vcode
 
@@ -112,8 +146,11 @@ exports.createUser = async(req, res) => {
         text: text,
         html: ""
     };
+    console.log("EMAIL GOING TO SEND");
 
     transporter.sendMail(mailOptions, function(error, info) {
+        console.log("INFOR , ERROR ", info, error);
+
         if (info) {
             return res.json({
                 msg: "To Verification Page",
@@ -130,6 +167,41 @@ exports.createUser = async(req, res) => {
         }
     })
 
+
+}
+
+
+exports.loginUser = async(req, res) => {
+    Pig.box("USER: Login");
+    console.log(req.body.data);
+    User.findOne({ email: req.body.data.email }).then((user, err) => {
+            console.log("user, err", user, err);
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            if (!user) {
+                return res.json({
+                    userMsg: "User doesn't exist"
+                });
+            } else if (!user.authenticate(req.body.data.password)) {
+                return res.json({
+                    userMsg: "You have entered wrong password"
+                });
+            } else if (user.authenticate(req.body.data.password)) {
+                return res.json({
+                    user: user,
+                    userMsg: "AUTH_YES"
+                })
+            }
+
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });
 }
 
 
