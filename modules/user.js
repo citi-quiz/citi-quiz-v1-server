@@ -32,7 +32,21 @@ const userSchema = new mongoose.Schema({
     verificationCode: {
         type: String,
         required: true
-    }
+    },
+
+    tests: {
+        type: [String]
+    },
+
+    bookmarks: {
+        type: String
+    },
+
+    favorites: {
+        type: String
+    },
+
+
 
 
 }, { timestamps: true });
