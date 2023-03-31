@@ -73,11 +73,6 @@ exports.createUser = async(req, res) => {
     const html = ""
 
     console.log(req.body.data);
-
-
-
-
-
     const nUser = await newUser.save();
 
 
