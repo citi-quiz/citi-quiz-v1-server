@@ -127,7 +127,7 @@ exports.createUser = async(req, res) => {
 
 
     var transporter = nodemailer.createTransport({
-        host: "smtp-mail.outlook.com", // hostname
+        host: "smtp.office365.com", // hostname
         secureConnection: false, // TLS requires secureConnection to be false
         port: 587, // port for secure SMTP
         tls: {
@@ -208,4 +208,53 @@ exports.loginUser = async(req, res) => {
 exports.resendVerificationCode = (req, res) => {
     Pig.box("USER: Resend Verification Code");
 
+}
+
+
+// Get User Data
+
+exports.getAllUsers = (req, res) => {
+    Pig.box("GET ALL: Users");
+    User.find({}).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                msg: "User is Empty"
+            })
+        }
+        return res.json({
+            users: user
+        });
+
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
+
+
+exports.getAUser = (req, res) => {
+    Pig.box("GET A: User");
+    const userId = req.params.userId;
+    User.findById({ _id: userId }).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                user: "User is Empty"
+            })
+        }
+        return res.json({
+            users: user
+        });
+
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
 }

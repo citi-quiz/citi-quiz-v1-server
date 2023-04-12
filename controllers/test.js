@@ -126,3 +126,23 @@ exports.getATest = (req, res) => {
             })
         });;;
 }
+
+
+exports.getAllTests = (req, res) => {
+    Pig.box("GET ALL: Tests");
+    Test.find({}).then((test, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                allTest: test
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });;;;
+}

@@ -122,6 +122,3 @@ exports.getQuestionEvaluate = () => {
     Pig.box("GET: Evaluated Questions");
 
 }
-
-
-exports.getQus
