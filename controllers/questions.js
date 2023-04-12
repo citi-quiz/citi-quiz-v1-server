@@ -1,11 +1,13 @@
 const Pig = require('pigcolor');
 const Question = require('../modules/question');
+const { v4: uuidv4 } = require('uuid');
 
 
 exports.createQuestion = (req, res) => {
     Pig.box("CREATE: Question");
+    console.log(req.body);
     const newQuestion = new Question();
-    newQuestion.questionId = req.body.questionId;
+    newQuestion.questionId = uuidv4();
     newQuestion.setUnder = req.body.setUnder;
     newQuestion.questionName = req.body.questionName;
     newQuestion.questionCategory = req.body.questionCategory;
