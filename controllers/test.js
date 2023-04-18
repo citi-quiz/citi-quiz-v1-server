@@ -7,7 +7,7 @@ const Question = require('../modules/question');
 // TODO: 
 exports.initializeTest = async(req, res) => {
     Pig.box("Initialize: Test");
-
+    console.log("res.body - ", req.body);
     const SCORE_VALUE = 5;
     // TODO: Login To Calculate Score and Verify Answers
 
@@ -56,14 +56,16 @@ exports.initializeTest = async(req, res) => {
         });
 
         newTest.setId = req.body.setId;
-        newTest.userId = req.body.userId;
+        newTest.userId = req.body.userId.value;
         newTest.questionId = req.body.questionId;
         newTest.score = score;
         newTest.rank = "0";
         newTest.result = "Pass";
         newTest.review = "Under Review";
         newTest.saved = true;
+        console.log("before saving", score);
         newTest.save().then((test, err) => {
+                console.log("test", test, err);
                 if (err) {
                     return res.status(400).json({
                         error: err
@@ -76,6 +78,7 @@ exports.initializeTest = async(req, res) => {
                 })
             })
             .catch((err) => {
+                console.log(err);
                 return res.status(400).json({
                     error: err
                 })

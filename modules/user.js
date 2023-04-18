@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
     },
 
     favorites: {
-        type: String
+        type: [String]
     },
 
 

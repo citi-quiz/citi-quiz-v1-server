@@ -124,48 +124,52 @@ exports.createUser = async(req, res) => {
     console.log(req.body.data);
     const nUser = await newUser.save();
 
-
-
-    var transporter = nodemailer.createTransport({
-        host: "smtp.office365.com", // hostname
-        secureConnection: false, // TLS requires secureConnection to be false
-        port: 587, // port for secure SMTP
-        tls: {
-            ciphers: 'SSLv3'
-        },
-        auth: {
-            user: 'citiquiz@hotmail.com',
-            pass: 'citiciti2023'
-        }
-    });
-
-    var mailOptions = {
-        from: 'citiquiz@hotmail.com',
-        to: to,
-        subject: subject,
-        text: text,
-        html: ""
-    };
-    console.log("EMAIL GOING TO SEND");
-
-    transporter.sendMail(mailOptions, function(error, info) {
-        console.log("INFOR , ERROR ", info, error);
-
-        if (info) {
-            return res.json({
-                msg: "To Verification Page",
-                redirect: true,
-                user: nUser
-            })
-        }
-        console.log("INFOR , ERROR ", info, error);
-        if (error) {
-            return res.json({
-                msg: "Error Page",
-                redirect: false
-            })
-        }
+    return res.json({
+        msg: "To Verification Page",
+        redirect: true,
+        user: nUser
     })
+
+    // var transporter = nodemailer.createTransport({
+    //     host: "smtp.office365.com", // hostname
+    //     secureConnection: false, // TLS requires secureConnection to be false
+    //     port: 587, // port for secure SMTP
+    //     tls: {
+    //         ciphers: 'SSLv3'
+    //     },
+    //     auth: {
+    //         user: 'citiquiz@hotmail.com',
+    //         pass: 'citiciti2023'
+    //     }
+    // });
+
+    // var mailOptions = {
+    //     from: 'citiquiz@hotmail.com',
+    //     to: to,
+    //     subject: subject,
+    //     text: text,
+    //     html: ""
+    // };
+    // console.log("EMAIL GOING TO SEND");
+
+    // transporter.sendMail(mailOptions, function(error, info) {
+    //     console.log("INFOR , ERROR ", info, error);
+
+    //     if (info) {
+    //         return res.json({
+    //             msg: "To Verification Page",
+    //             redirect: true,
+    //             user: nUser
+    //         })
+    //     }
+    //     console.log("INFOR , ERROR ", info, error);
+    //     if (error) {
+    //         return res.json({
+    //             msg: "Error Page",
+    //             redirect: false
+    //         })
+    //     }
+    // })
 
 
 }
