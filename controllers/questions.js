@@ -12,6 +12,8 @@ exports.createQuestion = (req, res) => {
     newQuestion.setUnder = req.body.setUnder;
     newQuestion.questionName = req.body.questionName;
     newQuestion.questionCategory = req.body.questionCategory;
+    newQuestion.questionDescription = req.body.questionDescription;
+    newQuestion.questionImpLink = req.body.questionImpLink;
     newQuestion.questionChoices = req.body.questionChoices;
     newQuestion.questionAnswer = req.body.questionAnswer;
     newQuestion.save()
@@ -101,7 +103,7 @@ exports.getQuestionAsSet = (req, res) => {
 
     const setId = req.params.setId;
     console.log("SetID - ", setId);
-    var random = Math.ceil(Math.random() * (13 - 1) + 1);
+    var random = Math.ceil(Math.random() * (2 - 1) + 1);
     Question.find({ setUnder: setId }).skip(random).limit(5)
         .then((question, err) => {
             console.log(question);
@@ -163,5 +165,28 @@ exports.addQuestionToFavroits = (req, res) => {
             })
         }
 
+    });
+}
+
+
+exports.getAllFavQuestions = (req, res) => {
+    Pig.box("GET ALL: Favorite Questions");
+    const userId = req.params.userId;
+    User.findById({ _id: userId }).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        Question.find().where("_id").in(user.favorites).exec()
+            .then((favQuestions) => {
+                return res.json({
+                    favQuestions: favQuestions
+                })
+            })
+    }).catch(err => {
+        return res.json({
+            error: err
+        })
     });
 }

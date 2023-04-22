@@ -1,7 +1,7 @@
 const express = require('express');
-const { createSetCategory, updateSetCategory, deleteSetCategory, getAllSubCategory, getASubCategory } = require('../controllers/admin/subcategory');
+const { createSetCategory, updateSetCategory, deleteSetCategory, getAllSubCategory, getASubCategory, getQuestionsAllInSetCategory } = require('../controllers/admin/subcategory');
 const { createSets, updateSets, deleteSets, getAllSets, getASets, getAllSetsByCategory } = require('../controllers/sets');
-const { createQuestion, getAllQuestions, getAQuestion, getQuestionAsSet, getQuestionsAllInSet, addQuestionToFavroits } = require('../controllers/questions');
+const { createQuestion, getAllQuestions, getAQuestion, getQuestionAsSet, getQuestionsAllInSet, addQuestionToFavroits, getAllFavQuestions } = require('../controllers/questions');
 const { initializeTest, getAllTests } = require('../controllers/test');
 const route = express.Router();
 
@@ -31,6 +31,7 @@ route.post("/question/create", createQuestion);
 
 
 route.get("/question/get/all/set/:setId", getQuestionsAllInSet);
+route.get("/question/get/all/set/under/:setId/category/:setCategory", getQuestionsAllInSetCategory);
 route.get("/question/get/all", getAllQuestions);
 route.get("/question/get/a/:qId", getAQuestion);
 
@@ -39,6 +40,7 @@ route.get("/question/get/a/:qId", getAQuestion);
 // ?? Special Queries
 route.get("/question/get/set/:setId/generate", getQuestionAsSet);
 route.post("/question/add/user", addQuestionToFavroits);
+route.get("/question/get/all/fav/user/:userId", getAllFavQuestions);
 
 // ********************* Test ****************************
 route.post("/test/create", initializeTest);

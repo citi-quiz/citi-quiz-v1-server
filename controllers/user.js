@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 var nodemailer = require('nodemailer');
 const Bookmark = require('../modules/bookmark');
 const Favorite = require('../modules/favorite');
-
+const Test = require('../modules/test');
 
 exports.isUserExist = (req, res) => {
     Pig.box("USER: Exist");
@@ -122,13 +122,24 @@ exports.createUser = async(req, res) => {
     const html = ""
 
     console.log(req.body.data);
-    const nUser = await newUser.save();
+    newUser.save().then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        console.log(user);
+        return res.json({
+            msg: "To Verification Page",
+            redirect: true,
+            user: user
+        })
+    }).catch((err) => {
+        return res.status(400).json({
+            error: err
+        })
+    });
 
-    return res.json({
-        msg: "To Verification Page",
-        redirect: true,
-        user: nUser
-    })
 
     // var transporter = nodemailer.createTransport({
     //     host: "smtp.office365.com", // hostname
@@ -261,4 +272,53 @@ exports.getAUser = (req, res) => {
     }).catch((err) => {
         console.log("Error - ", err);
     });
+}
+
+
+exports.extractAllUserDetails = (req, res) => {
+    Pig.box("Extract: All User Details");
+    const userId = req.params.userId;
+
+    User.findById({ _id: userId }).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                msg: "User Not Found"
+            })
+        }
+        Test.find().where('_id').in(user.tests).exec()
+            .then((alldetails, err) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+                return res.json({
+                    allUserDetails: user,
+                    allTestDetails: alldetails
+                })
+            }).catch((err) => {
+                console.log("Error - ", err);
+
+                return res.status(400).json({
+                    error: err
+                })
+            })
+
+    }).catch((err) => {
+        console.log("Error - ", err);
+
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+    });
+
+
+
 }

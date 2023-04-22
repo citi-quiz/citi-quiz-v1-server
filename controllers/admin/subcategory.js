@@ -1,5 +1,6 @@
 const Pig = require('pigcolor');
 const SubCategory = require('../../modules/setcategory');
+const Question = require('../../modules/question');
 
 exports.createSetCategory = (req, res) => {
     Pig.box("CREATE: Set Category");
@@ -109,4 +110,22 @@ exports.getASubCategory = (req, res) => {
                 error: err
             })
         });
+}
+
+exports.getQuestionsAllInSetCategory = (req, res) => {
+
+    Pig.box("GET ALL: Questions from Subcategory");
+    Question.find({ questionCategory: req.params.setCategory, setUnder: req.params.setId }).then((allQuestions, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        return res.json({
+            allQuestions: allQuestions
+        })
+    }).catch((err) => {
+
+    });
+
 }
