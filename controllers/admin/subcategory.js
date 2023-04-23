@@ -112,9 +112,11 @@ exports.getASubCategory = (req, res) => {
         });
 }
 
+// ? Special Request Questions
 exports.getQuestionsAllInSetCategory = (req, res) => {
 
     Pig.box("GET ALL: Questions from Subcategory");
+    console.log(req.params);
     Question.find({ questionCategory: req.params.setCategory, setUnder: req.params.setId }).then((allQuestions, err) => {
         if (err) {
             return res.status(400).json({
