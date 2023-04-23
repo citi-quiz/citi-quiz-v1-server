@@ -33,7 +33,10 @@ exports.initializeTest = async(req, res) => {
         questionIds.push(set.qid);
         answerIds.push(set.ansId);
 
+        console.log("Question ID ", set.qid);
+        console.log("Answer ID ", set.ansId);
     });
+
 
     let sortableQuestionSet = [];
     answerIds.sort((a, b) => parseFloat(a.answerId) - parseFloat(b.answerId));
