@@ -1,17 +1,16 @@
 const Pig = require('pigcolor');
 const Sets = require('../modules/sets');
+const { v4: uuidv4 } = require('uuid');
 
 exports.createSets = (req, res) => {
     Pig.box("CREATE: Sets");
     const newSets = Sets();
-    newSets.setId = req.body.setId;
+    newSets.setId = uuidv4();
     newSets.setName = req.body.setName;
     newSets.setDescription = req.body.setDescription;
     newSets.setCategory = req.body.setCategory;
     newSets.setTitle = req.body.setTitle;
     newSets.setDifficulty = req.body.setDifficulty;
-    newSets.setikes = req.body.setikes;
-    newSets.setQuestions = req.body.setQuestions;
     newSets.save()
         .then((sets, err) => {
             if (err) {

@@ -49,10 +49,16 @@ const userSchema = new mongoose.Schema({
     },
 
     favorites: {
-        type: String
+        type: [String]
     },
 
+    totalScore: {
+        type: Number
+    },
 
+    rank: {
+        type: Number
+    }
 
 
 }, { timestamps: true });

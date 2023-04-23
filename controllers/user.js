@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 var nodemailer = require('nodemailer');
 const Bookmark = require('../modules/bookmark');
 const Favorite = require('../modules/favorite');
-
+const Test = require('../modules/test');
 
 exports.isUserExist = (req, res) => {
     Pig.box("USER: Exist");
@@ -122,50 +122,65 @@ exports.createUser = async(req, res) => {
     const html = ""
 
     console.log(req.body.data);
-    const nUser = await newUser.save();
-
-
-
-    var transporter = nodemailer.createTransport({
-        host: "smtp-mail.outlook.com", // hostname
-        secureConnection: false, // TLS requires secureConnection to be false
-        port: 587, // port for secure SMTP
-        tls: {
-            ciphers: 'SSLv3'
-        },
-        auth: {
-            user: 'citiquiz@hotmail.com',
-            pass: 'citiciti2023'
+    newUser.save().then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
         }
+        console.log(user);
+        return res.json({
+            msg: "To Verification Page",
+            redirect: true,
+            user: user
+        })
+    }).catch((err) => {
+        return res.status(400).json({
+            error: err
+        })
     });
 
-    var mailOptions = {
-        from: 'citiquiz@hotmail.com',
-        to: to,
-        subject: subject,
-        text: text,
-        html: ""
-    };
-    console.log("EMAIL GOING TO SEND");
 
-    transporter.sendMail(mailOptions, function(error, info) {
-        console.log("INFOR , ERROR ", info, error);
+    // var transporter = nodemailer.createTransport({
+    //     host: "smtp.office365.com", // hostname
+    //     secureConnection: false, // TLS requires secureConnection to be false
+    //     port: 587, // port for secure SMTP
+    //     tls: {
+    //         ciphers: 'SSLv3'
+    //     },
+    //     auth: {
+    //         user: 'citiquiz@hotmail.com',
+    //         pass: 'citiciti2023'
+    //     }
+    // });
 
-        if (info) {
-            return res.json({
-                msg: "To Verification Page",
-                redirect: true,
-                user: nUser
-            })
-        }
-        console.log("INFOR , ERROR ", info, error);
-        if (error) {
-            return res.json({
-                msg: "Error Page",
-                redirect: false
-            })
-        }
-    })
+    // var mailOptions = {
+    //     from: 'citiquiz@hotmail.com',
+    //     to: to,
+    //     subject: subject,
+    //     text: text,
+    //     html: ""
+    // };
+    // console.log("EMAIL GOING TO SEND");
+
+    // transporter.sendMail(mailOptions, function(error, info) {
+    //     console.log("INFOR , ERROR ", info, error);
+
+    //     if (info) {
+    //         return res.json({
+    //             msg: "To Verification Page",
+    //             redirect: true,
+    //             user: nUser
+    //         })
+    //     }
+    //     console.log("INFOR , ERROR ", info, error);
+    //     if (error) {
+    //         return res.json({
+    //             msg: "Error Page",
+    //             redirect: false
+    //         })
+    //     }
+    // })
 
 
 }
@@ -207,5 +222,103 @@ exports.loginUser = async(req, res) => {
 
 exports.resendVerificationCode = (req, res) => {
     Pig.box("USER: Resend Verification Code");
+
+}
+
+
+// Get User Data
+
+exports.getAllUsers = (req, res) => {
+    Pig.box("GET ALL: Users");
+    User.find({}).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                msg: "User is Empty"
+            })
+        }
+        return res.json({
+            users: user
+        });
+
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
+
+
+exports.getAUser = (req, res) => {
+    Pig.box("GET A: User");
+    const userId = req.params.userId;
+    User.findById({ _id: userId }).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                user: "User is Empty"
+            })
+        }
+        return res.json({
+            users: user
+        });
+
+    }).catch((err) => {
+        console.log("Error - ", err);
+    });
+}
+
+
+exports.extractAllUserDetails = (req, res) => {
+    Pig.box("Extract: All User Details");
+    const userId = req.params.userId;
+
+    User.findById({ _id: userId }).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!user) {
+            return res.json({
+                msg: "User Not Found"
+            })
+        }
+        Test.find().where('_id').in(user.tests).exec()
+            .then((alldetails, err) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+                return res.json({
+                    allUserDetails: user,
+                    allTestDetails: alldetails
+                })
+            }).catch((err) => {
+                console.log("Error - ", err);
+
+                return res.status(400).json({
+                    error: err
+                })
+            })
+
+    }).catch((err) => {
+        console.log("Error - ", err);
+
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+    });
+
+
 
 }

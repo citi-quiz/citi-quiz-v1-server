@@ -2,12 +2,13 @@ const Pig = require('pigcolor');
 const Test = require('../modules/test');
 const { v4: uuidv4 } = require('uuid');
 const Question = require('../modules/question');
+const User = require('../modules/user');
 
 
 // TODO: 
 exports.initializeTest = async(req, res) => {
     Pig.box("Initialize: Test");
-
+    console.log("res.body - ", req.body);
     const SCORE_VALUE = 5;
     // TODO: Login To Calculate Score and Verify Answers
 
@@ -56,24 +57,58 @@ exports.initializeTest = async(req, res) => {
         });
 
         newTest.setId = req.body.setId;
-        newTest.userId = req.body.userId;
+        newTest.userId = req.body.userId.value;
         newTest.questionId = req.body.questionId;
         newTest.score = score;
         newTest.rank = "0";
         newTest.result = "Pass";
         newTest.review = "Under Review";
         newTest.saved = true;
+        console.log("before saving", score);
         newTest.save().then((test, err) => {
                 if (err) {
                     return res.status(400).json({
                         error: err
                     })
                 }
-                return res.json({
-                    allTest: test,
-                    questions: questions,
-                    score: score
-                })
+                console.log("User Before", req.body.userId.value);
+                User.findById({ _id: req.body.userId.value }).then((user, err) => {
+                    if (user) {
+                        user.tests.push(test._id);
+                        let user_score = 0;
+                        if (!user.totalScore) {
+                            user_score = score;
+                        } else {
+                            user_score = user.totalScore + score;
+                        }
+                        user.totalScore = user_score;
+                        user.save().then((userScore, err) => {
+                            if (err) {
+                                return res.status(400).json({
+                                    error: err
+                                })
+                            }
+
+                            return res.json({
+                                allTest: test,
+                                questions: questions,
+                                score: score,
+                                user: userScore
+                            });
+
+
+                        }).catch((err) => {
+                            return res.status(400).json({
+                                error: err
+                            })
+                        });
+                    }
+                }).catch((err) => {
+                    return res.status(400).json({
+                        error: err
+                    })
+                });
+
             })
             .catch((err) => {
                 return res.status(400).json({
@@ -125,4 +160,24 @@ exports.getATest = (req, res) => {
                 error: err
             })
         });;;
+}
+
+
+exports.getAllTests = (req, res) => {
+    Pig.box("GET ALL: Tests");
+    Test.find({}).then((test, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                allTest: test
+            })
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err
+            })
+        });;;;
 }

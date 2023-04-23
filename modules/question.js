@@ -19,6 +19,15 @@ const questionsSchema = new mongoose.Schema({
         trim: true
     },
 
+    questionDescription: {
+        type: String,
+        required: true
+    },
+
+    questionImpLink: {
+        type: String
+    },
+
     questionCategory: {
         type: String,
         required: true
