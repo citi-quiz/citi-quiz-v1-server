@@ -39,7 +39,7 @@ exports.initializeTest = async(req, res) => {
 
 
     let sortableQuestionSet = [];
-    answerIds.sort((a, b) => parseFloat(a.answerId) - parseFloat(b.answerId));
+    // answerIds.sort((a, b) => parseFloat(a.answerId) - parseFloat(b.answerId));
     // Here fix the sorting issue
     // console.log(answerIds);
 
