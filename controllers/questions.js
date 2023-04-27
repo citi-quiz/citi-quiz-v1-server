@@ -168,6 +168,41 @@ exports.addQuestionToFavroits = (req, res) => {
     });
 }
 
+exports.removeQuestionToFavroits = (req, res) => {
+    Pig.box("REMOVE: Question To Fav");
+    const questionId = req.body.questionId;
+    const userId = req.body.userId.value;
+    User.findOne({ _id: userId }).then((user, err) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        const isQuestionExist = user.favorites.filter(q => q === questionId);
+        const isQuestionExistIndex = user.favorites.findIndex(q => q === questionId);
+
+        // console.log('isQuestionExist remove     -> ', isQuestionExist);
+        // console.log('isQuestionExist Index remove     -> ', isQuestionExistIndex);
+
+        const userFav = user.favorites;
+        console.log(userFav);
+        userFav.splice(isQuestionExistIndex, 1);
+        console.log(userFav);
+        user.favorites = userFav;
+        user.save().then((quser, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            return res.json({
+                user: quser
+            })
+        })
+
+    });
+}
+
 
 exports.getAllFavQuestions = (req, res) => {
     Pig.box("GET ALL: Favorite Questions");
