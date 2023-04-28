@@ -100,11 +100,10 @@ exports.getQuestionsAllInSet = (req, res) => {
 exports.getQuestionAsSet = (req, res) => {
     Pig.box("GET ALL: Generate Question ");
 
-
     const setId = req.params.setId;
     console.log("SetID - ", setId);
     var random = Math.ceil(Math.random() * (2 - 1) + 1);
-    Question.find({ setUnder: setId }).skip(random).limit(5)
+    Question.find({ setUnder: setId }).skip(random).limit(7)
         .then((question, err) => {
             console.log(question);
             if (err) {
@@ -202,7 +201,6 @@ exports.removeQuestionToFavroits = (req, res) => {
 
     });
 }
-
 
 exports.getAllFavQuestions = (req, res) => {
     Pig.box("GET ALL: Favorite Questions");
