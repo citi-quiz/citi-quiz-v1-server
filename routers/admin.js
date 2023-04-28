@@ -1,7 +1,7 @@
 const express = require('express');
 const { createSetCategory, updateSetCategory, deleteSetCategory, getAllSubCategory, getASubCategory, getQuestionsAllInSetCategory } = require('../controllers/admin/subcategory');
 const { createSets, updateSets, deleteSets, getAllSets, getASets, getAllSetsByCategory } = require('../controllers/sets');
-const { createQuestion, getAllQuestions, getAQuestion, getQuestionAsSet, getQuestionsAllInSet, addQuestionToFavroits, getAllFavQuestions, removeQuestionToFavroits } = require('../controllers/questions');
+const { createQuestion, getAllQuestions, getAQuestion, getQuestionAsSet, getQuestionsAllInSet, addQuestionToFavroits, getAllFavQuestions, removeQuestionToFavroits, addQuestionToBookmark, removeQuestionToBookmark, getAllBookmarkQuestions } = require('../controllers/questions');
 const { initializeTest, getAllTests } = require('../controllers/test');
 const route = express.Router();
 
@@ -40,8 +40,14 @@ route.get("/question/get/a/:qId", getAQuestion);
 // ?? Special Queries
 route.get("/question/get/set/:setId/generate", getQuestionAsSet);
 route.post("/question/add/user", addQuestionToFavroits);
+route.post("/question/add/bookmark/user", addQuestionToBookmark);
+route.post("/question/remove/bookmark/user", removeQuestionToBookmark);
 route.post("/question/remove/user", removeQuestionToFavroits);
 route.get("/question/get/all/fav/user/:userId", getAllFavQuestions);
+route.get("/question/get/all/bookmark/user/:userId", getAllBookmarkQuestions);
+
+
+
 
 // ********************* Test ****************************
 route.post("/test/create", initializeTest);
