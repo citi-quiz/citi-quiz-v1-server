@@ -104,17 +104,17 @@ exports.createUser = async(req, res) => {
     newUser.email_verified = "false";
     newUser.verificationCode = vcode
 
-    const newBookmark = new Bookmark();
-    newBookmark.bookmarkId = uuidv4();
-    newBookmark.bookmarkName = "bookmark" + bfcode;
-    const bookmarkHere = await newBookmark.save();
-    newUser.bookmarks = bookmarkHere._id;
+    // const newBookmark = new Bookmark();
+    // newBookmark.bookmarkId = uuidv4();
+    // newBookmark.bookmarkName = "bookmark" + bfcode;
+    // const bookmarkHere = await newBookmark.save();
+    // newUser.bookmarks = bookmarkHere._id;
     const newFavorite = new Favorite();
     newFavorite.favoriteId = uuidv4();
     newFavorite.favoriteName = "favorite" + bfcode;
     const favoriteHere = await newFavorite.save();
     newUser.favorites = favoriteHere._id;
-    console.log("Bookmark and Favorits - ", bookmarkHere._id, favoriteHere._id);
+    // console.log("Bookmark and Favorits - ", bookmarkHere._id, favoriteHere._id);
     // Verification Code Section
     const to = req.body.data.email;
     const subject = "citi-quiz.com - Verification Code"

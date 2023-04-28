@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
     },
 
     bookmarks: {
-        type: String
+        type: [String]
     },
 
     favorites: {
