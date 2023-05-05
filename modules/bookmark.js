@@ -1,23 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-
-const bookmarkSchema = new mongoose.Schema({
-
+const bookmarkSchema = new mongoose.Schema(
+  {
     bookmarkId: {
-        type: String,
-        unique: true,
-        required: true
+      type: String,
+      unique: true,
+      required: true,
     },
 
     bookmarkName: {
-        type: String
+      type: String,
     },
 
     bookmarkList: {
-        type: [String]
-    }
-
-
-}, { timestamps: true });
+      type: [String],
+    },
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Bookmark", bookmarkSchema);
