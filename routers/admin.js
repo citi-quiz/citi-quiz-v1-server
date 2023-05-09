@@ -28,6 +28,7 @@ const {
   removeQuestionToBookmark,
   getAllBookmarkQuestions,
   deleteQuestion,
+  updateQuestion,
 } = require("../controllers/questions");
 const { initializeTest, getAllTests } = require("../controllers/test");
 const route = express.Router();
@@ -51,6 +52,7 @@ route.get("/sets/get/all/by/category/:categoryId", getAllSetsByCategory);
 
 // ******************** Question *************************
 route.post("/question/create", createQuestion);
+route.put("/question/update", updateQuestion);
 route.delete("/question/delete", deleteQuestion);
 
 route.get("/question/get/all/set/:setId", getQuestionsAllInSet);
