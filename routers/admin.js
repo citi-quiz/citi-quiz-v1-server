@@ -15,6 +15,7 @@ const {
   getASets,
   getAllSetsByCategory,
   disableSets,
+  enableSets,
 } = require("../controllers/sets");
 const {
   createQuestion,
@@ -46,6 +47,7 @@ route.get("/setcategory/get/a/:subcategoryId", getASubCategory);
 // ******************** Sets *************************
 route.post("/sets/create", createSets);
 route.post("/sets/disable", disableSets);
+route.post("/sets/enable", enableSets);
 route.put("/sets/update/:sId", updateSets);
 route.delete("/sets/delete/:sId", deleteSets);
 

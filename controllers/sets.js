@@ -74,7 +74,6 @@ exports.updateSets = (req, res) => {
 
 exports.disableSets = (req, res) => {
   Pig.box("DISABLE: Sets");
-  console.log(req.body);
   const setId = req.body._id;
   Sets.findById({ _id: req.body._id })
     .then((sets, err) => {
@@ -84,8 +83,43 @@ exports.disableSets = (req, res) => {
         });
       }
       sets.setId = req.body.setId;
-      sets.setName = "Disabled";
-      sets.setDescription = req.body.setDescription;
+      sets.setName = req.body.setName;
+      sets.setDescription = "Disable";
+      sets.setCategory = req.body.setCategory;
+      sets.setTitle = req.body.setTitle;
+      sets.setDifficulty = req.body.setDifficulty;
+      sets.setikes = req.body.setikes;
+      sets.setQuestions = req.body.setQuestions;
+      sets.save().then((newsets, err) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+          });
+        }
+        return res.json({
+          sets: newsets,
+        });
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({
+        error: err,
+      });
+    });
+};
+
+exports.enableSets = (req, res) => {
+  Pig.box("Enable: Sets");
+  Sets.findById({ _id: req.body._id })
+    .then((sets, err) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      sets.setId = req.body.setId;
+      sets.setName = req.body.setName;
+      sets.setDescription = "Enable";
       sets.setCategory = req.body.setCategory;
       sets.setTitle = req.body.setTitle;
       sets.setDifficulty = req.body.setDifficulty;
