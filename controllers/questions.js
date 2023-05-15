@@ -7,7 +7,6 @@ const { propfind } = require("../routers/admin");
 
 exports.createQuestion = (req, res) => {
   Pig.box("CREATE: Question");
-  console.log(req.body);
   const newQuestion = new Question();
   newQuestion.questionId = uuidv4();
   newQuestion.setUnder = req.body.setUnder;
@@ -39,6 +38,7 @@ exports.createQuestion = (req, res) => {
 exports.deleteQuestion = (req, res) => {
   Pig.box("DELETE: Question");
   const questionId = req.body.questionId;
+  console.log(req.body);
   Question.findByIdAndDelete({ _id: questionId })
     .then((question, err) => {
       if (err) {
@@ -57,6 +57,31 @@ exports.deleteQuestion = (req, res) => {
         error: err,
       });
     });
+};
+
+exports.updateQuestion = (req, res) => {
+  Pig.box("UPDATE: Question");
+  console.log(req.body);
+  Question.findById({ _id: req.body.qId }).then((question, err) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    if (!question)
+      return res.json({
+        msg: "No Question Exist",
+      });
+    question.questionId = uuidv4();
+    question.setUnder = req.body.setUnder;
+    question.questionName = req.body.questionName;
+    question.questionCategory = req.body.questionCategory;
+    question.questionDescription = req.body.questionDescription;
+    question.questionImpLink = req.body.questionImpLink;
+    question.questionChoices = req.body.questionChoices;
+    question.questionAnswer = req.body.questionAnswer;
+    question.save();
+  });
 };
 
 exports.getAllQuestions = (req, res) => {
@@ -165,6 +190,7 @@ exports.addQuestionToFavroits = (req, res) => {
         error: err,
       });
     }
+
     const isQuestionExist = user.favorites.filter((q) => q === questionId);
     console.log(isQuestionExist);
     if (isQuestionExist.length < 1) {
@@ -234,6 +260,35 @@ exports.getAllFavQuestions = (req, res) => {
         });
       }
       Question.find()
+        .where("_id")
+        .in(user.favorites)
+        .exec()
+        .then((favQuestions) => {
+          return res.json({
+            favQuestions: favQuestions,
+          });
+        });
+    })
+    .catch((err) => {
+      return res.json({
+        error: err,
+      });
+    });
+};
+
+exports.getAllFavQuestionsUderSet = (req, res) => {
+  Pig.box("GET ALL: Fav Question User Set");
+  const userId = req.params.userId;
+  const setUnderId = req.params.setId;
+  console.log(req.params);
+  User.findById({ _id: userId })
+    .then((user, err) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      Question.find({ setUnder: setUnderId })
         .where("_id")
         .in(user.favorites)
         .exec()
