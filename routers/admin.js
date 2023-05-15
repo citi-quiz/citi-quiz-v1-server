@@ -14,6 +14,7 @@ const {
   getAllSets,
   getASets,
   getAllSetsByCategory,
+  disableSets,
 } = require("../controllers/sets");
 const {
   createQuestion,
@@ -29,6 +30,7 @@ const {
   getAllBookmarkQuestions,
   deleteQuestion,
   updateQuestion,
+  getAllFavQuestionsUderSet,
 } = require("../controllers/questions");
 const { initializeTest, getAllTests } = require("../controllers/test");
 const route = express.Router();
@@ -43,6 +45,7 @@ route.get("/setcategory/get/a/:subcategoryId", getASubCategory);
 
 // ******************** Sets *************************
 route.post("/sets/create", createSets);
+route.post("/sets/disable", disableSets);
 route.put("/sets/update/:sId", updateSets);
 route.delete("/sets/delete/:sId", deleteSets);
 
@@ -70,6 +73,10 @@ route.post("/question/add/bookmark/user", addQuestionToBookmark);
 route.post("/question/remove/bookmark/user", removeQuestionToBookmark);
 route.post("/question/remove/user", removeQuestionToFavroits);
 route.get("/question/get/all/fav/user/:userId", getAllFavQuestions);
+route.get(
+  "/question/get/all/fav/setunder/:setId/user/:userId",
+  getAllFavQuestionsUderSet
+);
 route.get("/question/get/all/bookmark/user/:userId", getAllBookmarkQuestions);
 
 // ********************* Test ****************************

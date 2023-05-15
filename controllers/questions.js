@@ -190,36 +190,26 @@ exports.addQuestionToFavroits = (req, res) => {
         error: err,
       });
     }
-    console.log(user);
-    const setFound = user.bookmarks.find(
-      (setID) => (setID.id = req.body.setId)
-    );
-    if (!setFound) {
-      console.log(setFound);
-    }
-    // if not exist ?
-    // create a object
-    // { setId: [b1, b2, b3, b4], setId: [b1, b2, b3, b4]}
 
-    // const isQuestionExist = user.favorites.filter((q) => q === questionId);
-    // console.log(isQuestionExist);
-    // if (isQuestionExist.length < 1) {
-    //   user.favorites.push(questionId);
-    //   user.save().then((quser, err) => {
-    //     if (err) {
-    //       return res.status(400).json({
-    //         error: err,
-    //       });
-    //     }
-    //     return res.json({
-    //       user: quser,
-    //     });
-    //   });
-    // } else {
-    //   return res.json({
-    //     msg: "Already in Fav",
-    //   });
-    // }
+    const isQuestionExist = user.favorites.filter((q) => q === questionId);
+    console.log(isQuestionExist);
+    if (isQuestionExist.length < 1) {
+      user.favorites.push(questionId);
+      user.save().then((quser, err) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+          });
+        }
+        return res.json({
+          user: quser,
+        });
+      });
+    } else {
+      return res.json({
+        msg: "Already in Fav",
+      });
+    }
   });
 };
 
@@ -270,6 +260,35 @@ exports.getAllFavQuestions = (req, res) => {
         });
       }
       Question.find()
+        .where("_id")
+        .in(user.favorites)
+        .exec()
+        .then((favQuestions) => {
+          return res.json({
+            favQuestions: favQuestions,
+          });
+        });
+    })
+    .catch((err) => {
+      return res.json({
+        error: err,
+      });
+    });
+};
+
+exports.getAllFavQuestionsUderSet = (req, res) => {
+  Pig.box("GET ALL: Fav Question User Set");
+  const userId = req.params.userId;
+  const setUnderId = req.params.setId;
+  console.log(req.params);
+  User.findById({ _id: userId })
+    .then((user, err) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      Question.find({ setUnder: setUnderId })
         .where("_id")
         .in(user.favorites)
         .exec()
