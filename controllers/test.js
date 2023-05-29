@@ -35,6 +35,7 @@ exports.initializeTest = async (req, res) => {
     console.log("Answer ID ", set.ansId);
   });
 
+  console.log("Question: User Answered - ", questionSet);
   let sortableQuestionSet = [];
 
   Question.find()
@@ -49,18 +50,18 @@ exports.initializeTest = async (req, res) => {
       let score = 0;
 
       // ** Test Score Calculations Algorithm
-      /** 
-         * 
+      /**
+         *
          * total score = totalQuestion * 5
         history = totalQuestion.history * 5 / totalHistory
         geography = totalQuestion.geography * 5
         politics = totalQuestion.politics * 5
 
-        Test Result : Pass or Fail 
-        
+        Test Result : Pass or Fail
+
         **/
 
-      const TOTAL_SCORE = questionSet.length * 5;
+      const TOTAL_SCORE = questionSet.length * 1;
 
       let setCategory = [];
       let setCategoryCorrect = [];
