@@ -80,7 +80,17 @@ exports.updateQuestion = (req, res) => {
     question.questionImpLink = req.body.questionImpLink;
     question.questionChoices = req.body.questionChoices;
     question.questionAnswer = req.body.questionAnswer;
-    question.save();
+    question.save().then((updatedQuestion, err) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      if (updatedQuestion)
+        return res.json({
+          question: updatedQuestion,
+        });
+    });
   });
 };
 
@@ -146,6 +156,33 @@ exports.getQuestionsAllInSet = (req, res) => {
     });
 };
 
+exports.getQuestionAsSetIndexBased = (req, res) => {
+  Pig.box("GET ALL: Generate Question By Limit");
+
+  const setId = req.params.setId;
+  const Ind = req.params.ind;
+  console.log("SetID - ", setId, Ind);
+  Question.find({ setUnder: setId })
+    .skip(Ind - 6)
+    // .limit()
+    .then((question, err) => {
+      console.log(question);
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      return res.json({
+        allquestion: question,
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({
+        error: err,
+      });
+    });
+};
+
 exports.getQuestionAsSet = (req, res) => {
   Pig.box("GET ALL: Generate Question ");
 
@@ -153,8 +190,7 @@ exports.getQuestionAsSet = (req, res) => {
   console.log("SetID - ", setId);
   var random = Math.ceil(Math.random() * (2 - 1) + 1);
   Question.find({ setUnder: setId })
-    .skip(random)
-    .limit(7)
+    .skip(0)
     .then((question, err) => {
       console.log(question);
       if (err) {

@@ -58,6 +58,14 @@ const userSchema = new mongoose.Schema(
     rank: {
       type: Number,
     },
+
+    reviewBookmarkIndex: {
+      type: Number,
+    },
+
+    testTestIndex: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );

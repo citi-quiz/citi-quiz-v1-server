@@ -32,6 +32,7 @@ const {
   deleteQuestion,
   updateQuestion,
   getAllFavQuestionsUderSet,
+  getQuestionAsSetIndexBased,
 } = require("../controllers/questions");
 const { initializeTest, getAllTests } = require("../controllers/test");
 const route = express.Router();
@@ -70,6 +71,10 @@ route.get("/question/get/a/:qId", getAQuestion);
 
 // ?? Special Queries
 route.get("/question/get/set/:setId/generate", getQuestionAsSet);
+route.get(
+  "/question/get/set/:setId/generate/index/:ind",
+  getQuestionAsSetIndexBased
+);
 route.post("/question/add/user", addQuestionToFavroits);
 route.post("/question/add/bookmark/user", addQuestionToBookmark);
 route.post("/question/remove/bookmark/user", removeQuestionToBookmark);
