@@ -19,6 +19,12 @@ exports.initializeTest = async (req, res) => {
   const setId = req.body.setId;
   const userId = req.body.userId;
   const questionSet = req.body.questionId;
+  const testIndex = req.body.questionCompletedIndex;
+
+  const userTestUnderSetIndex = {
+    setId: setId,
+    testIndex: testIndex,
+  };
 
   const questionIds = [];
   const answerIds = [];
