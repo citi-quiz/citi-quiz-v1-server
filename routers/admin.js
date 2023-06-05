@@ -63,7 +63,7 @@ route.delete("/question/delete", deleteQuestion);
 
 route.get("/question/get/all/set/:setId", getQuestionsAllInSet);
 route.get(
-  "/question/get/all/set/under/:setId/category/:setCategory",
+  "/question/get/all/set/under/:setId/category/:setCategory/review/:userId",
   getQuestionsAllInSetCategory
 );
 route.get("/question/get/all", getAllQuestions);

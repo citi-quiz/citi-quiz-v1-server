@@ -3,7 +3,7 @@ const Question = require("../modules/question");
 const User = require("../modules/user");
 const Bookmark = require("../modules/bookmark");
 const { v4: uuidv4 } = require("uuid");
-const { propfind } = require("../routers/admin");
+const { propfind, use } = require("../routers/admin");
 
 exports.createQuestion = (req, res) => {
   Pig.box("CREATE: Question");
@@ -375,33 +375,135 @@ exports.addQuestionToBookmark = (req, res) => {
   const bookmarkIndex = req.body.bookbarkIndex;
   const setId = req.body.setId;
 
-  // User.findOne({ _id: userId }).then((user, err) => {
-  //   if (err) {
-  //     return res.status(400).json({
-  //       error: err,
-  //     });
-  //   }
-  //   const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
-  //   console.log(isQuestionExist);
-  //   // console.log(user.bookmarks);
-  //   if (isQuestionExist.length < 1) {
-  //     user.bookmarks.push(questionId);
-  //     user.save().then((quser, err) => {
-  //       if (err) {
-  //         return res.status(400).json({
-  //           error: err,
-  //         });
-  //       }
-  //       return res.json({
-  //         user: quser,
-  //       });
-  //     });
-  //   } else {
-  //     return res.json({
-  //       msg: "Already in Fav",
-  //     });
-  //   }
-  // });
+  User.findOne({ _id: userId }).then((user, err) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    if (!user) {
+      return res.json({
+        msg: "User not exist",
+      });
+    }
+
+    // ? Cases
+    // Case 1: New user empty -> empty reviewBookmarkIndex
+    // Case 2: user but with  -> empty reviewBookmarkIndex
+    // Case 3: user with      -> reviewBookmarkIndex
+    console.log(req.body);
+    if (user.reviewBookmarkIndex.length === 0) {
+      let bookmarkIndexObject = {
+        setId: setId,
+        reviewBookmarkIndex: bookmarkIndex,
+      };
+      var userReviewIndexTemp = [...user.reviewBookmarkIndex];
+      userReviewIndexTemp.push(bookmarkIndexObject);
+      user.reviewBookmarkIndex = userReviewIndexTemp;
+
+      user
+        .save()
+        .then((bUser, err) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+          return res.json({
+            user: bUser,
+          });
+        })
+        .catch((err) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+        });
+    } else {
+      const setIdExist = user.reviewBookmarkIndex.filter(
+        (q) => q.setId === setId
+      );
+      if (setIdExist.length === 0) {
+        let bookmarkIndexObject = {
+          setId: setId,
+          reviewBookmarkIndex: bookmarkIndex,
+        };
+        var userReviewIndexTemp = [...user.reviewBookmarkIndex];
+        userReviewIndexTemp.push(bookmarkIndexObject);
+        user.reviewBookmarkIndex = userReviewIndexTemp;
+        user
+          .save()
+          .then((bUser, err) => {
+            if (err) {
+              return res.status(400).json({
+                error: err,
+              });
+            }
+            return res.json({
+              user: bUser,
+            });
+          })
+          .catch((err) => {
+            if (err) {
+              return res.status(400).json({
+                error: err,
+              });
+            }
+          });
+      }
+      const setIdExistIndex = user.reviewBookmarkIndex.findIndex(
+        (q) => q.setId === setId
+      );
+      let bookmarkIndexObject = {
+        setId: setId,
+        reviewBookmarkIndex: bookmarkIndex,
+      };
+      var userReviewIndexTemp = [...user.reviewBookmarkIndex];
+      userReviewIndexTemp[setIdExistIndex] = bookmarkIndexObject;
+      user.reviewBookmarkIndex = userReviewIndexTemp;
+      user
+        .save()
+        .then((bUser, err) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+          return res.json({
+            user: bUser,
+          });
+        })
+        .catch((err) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+        });
+    }
+
+    // const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
+    // console.log(isQuestionExist);
+    // // console.log(user.bookmarks);
+    // if (isQuestionExist.length < 1) {
+    //   user.bookmarks.push(questionId);
+    //   user.save().then((quser, err) => {
+    //     if (err) {
+    //       return res.status(400).json({
+    //         error: err,
+    //       });
+    //     }
+    //     return res.json({
+    //       user: quser,
+    //     });
+    //   });
+    // } else {
+    //   return res.json({
+    //     msg: "Already in Fav",
+    //   });
+    // }
+  });
 };
 
 exports.removeQuestionToBookmark = (req, res) => {
@@ -409,34 +511,96 @@ exports.removeQuestionToBookmark = (req, res) => {
   Pig.box("REMOVE: Question To Fav");
   const questionId = req.body.questionId;
   const userId = req.body.userId.value;
+  const bookmarkIndex = req.body.bookbarkIndex;
+  const setId = req.body.setId;
+
   User.findOne({ _id: userId }).then((user, err) => {
     if (err) {
       return res.status(400).json({
         error: err,
       });
     }
-    const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
-    const isQuestionExistIndex = user.bookmarks.findIndex(
-      (q) => q === questionId
-    );
+    if (!user) {
+      return res.json({
+        msg: "User not exist",
+      });
+    }
 
-    // console.log('isQuestionExist remove     -> ', isQuestionExist);
-    // console.log('isQuestionExist Index remove     -> ', isQuestionExistIndex);
-
-    const userFav = user.bookmarks;
-    console.log(userFav);
-    userFav.splice(isQuestionExistIndex, 1);
-    console.log(userFav);
-    user.bookmarks = userFav;
-    user.save().then((quser, err) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
+    console.log(req.body);
+    if (user.reviewBookmarkIndex.length === 0) {
+      return res.json({
+        user: user,
+      });
+    } else {
+      const setIdExist = user.reviewBookmarkIndex.filter(
+        (q) => q.setId === setId
+      );
+      const setIdExistIndex = user.reviewBookmarkIndex.findIndex(
+        (q) => q.setId === setId
+      );
+      if (setIdExistIndex) {
+        let bookmarkIndexObject = {
+          setId: setId,
+          reviewBookmarkIndex: 0,
+        };
+        var userReviewIndexTemp = [...user.reviewBookmarkIndex];
+        userReviewIndexTemp[setIdExistIndex] = bookmarkIndexObject;
+        user.reviewBookmarkIndex = userReviewIndexTemp;
+        user
+          .save()
+          .then((bUser, err) => {
+            if (err) {
+              return res.status(400).json({
+                error: err,
+              });
+            }
+            return res.json({
+              user: bUser,
+            });
+          })
+          .catch((err) => {
+            if (err) {
+              return res.status(400).json({
+                error: err,
+              });
+            }
+          });
+      } else {
+        return res.json({
+          user: user,
         });
       }
-      return res.json({
-        user: quser,
-      });
-    });
+    }
   });
+
+  // User.findOne({ _id: userId }).then((user, err) => {
+  //   if (err) {
+  //     return res.status(400).json({
+  //       error: err,
+  //     });
+  //   }
+  //   const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
+  //   const isQuestionExistIndex = user.bookmarks.findIndex(
+  //     (q) => q === questionId
+  //   );
+
+  //   // console.log('isQuestionExist remove     -> ', isQuestionExist);
+  //   // console.log('isQuestionExist Index remove     -> ', isQuestionExistIndex);
+
+  //   const userFav = user.bookmarks;
+  //   console.log(userFav);
+  //   userFav.splice(isQuestionExistIndex, 1);
+  //   console.log(userFav);
+  //   user.bookmarks = userFav;
+  //   user.save().then((quser, err) => {
+  //     if (err) {
+  //       return res.status(400).json({
+  //         error: err,
+  //       });
+  //     }
+  //     return res.json({
+  //       user: quser,
+  //     });
+  //   });
+  // });
 };
