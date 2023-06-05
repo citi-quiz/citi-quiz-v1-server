@@ -372,33 +372,36 @@ exports.addQuestionToBookmark = (req, res) => {
   Pig.box("ADD: Question to Bookmark");
   const questionId = req.body.questionId;
   const userId = req.body.userId.value;
-  User.findOne({ _id: userId }).then((user, err) => {
-    if (err) {
-      return res.status(400).json({
-        error: err,
-      });
-    }
-    const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
-    console.log(isQuestionExist);
-    // console.log(user.bookmarks);
-    if (isQuestionExist.length < 1) {
-      user.bookmarks.push(questionId);
-      user.save().then((quser, err) => {
-        if (err) {
-          return res.status(400).json({
-            error: err,
-          });
-        }
-        return res.json({
-          user: quser,
-        });
-      });
-    } else {
-      return res.json({
-        msg: "Already in Fav",
-      });
-    }
-  });
+  const bookmarkIndex = req.body.bookbarkIndex;
+  const setId = req.body.setId;
+
+  // User.findOne({ _id: userId }).then((user, err) => {
+  //   if (err) {
+  //     return res.status(400).json({
+  //       error: err,
+  //     });
+  //   }
+  //   const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
+  //   console.log(isQuestionExist);
+  //   // console.log(user.bookmarks);
+  //   if (isQuestionExist.length < 1) {
+  //     user.bookmarks.push(questionId);
+  //     user.save().then((quser, err) => {
+  //       if (err) {
+  //         return res.status(400).json({
+  //           error: err,
+  //         });
+  //       }
+  //       return res.json({
+  //         user: quser,
+  //       });
+  //     });
+  //   } else {
+  //     return res.json({
+  //       msg: "Already in Fav",
+  //     });
+  //   }
+  // });
 };
 
 exports.removeQuestionToBookmark = (req, res) => {
