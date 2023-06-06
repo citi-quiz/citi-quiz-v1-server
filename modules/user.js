@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema(
     },
 
     reviewBookmarkIndex: {
-      type: Number,
+      type: [Object],
     },
 
     testTestIndex: {
