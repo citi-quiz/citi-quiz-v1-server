@@ -35,6 +35,10 @@ const {
   getQuestionAsSetIndexBased,
 } = require("../controllers/questions");
 const { initializeTest, getAllTests } = require("../controllers/test");
+const {
+  createNotification,
+  destroyNotification,
+} = require("../controllers/notification/notification");
 const route = express.Router();
 
 // ******************** Sub Category **********************
@@ -89,5 +93,9 @@ route.get("/question/get/all/bookmark/user/:userId", getAllBookmarkQuestions);
 // ********************* Test ****************************
 route.post("/test/create", initializeTest);
 route.get("/test/get/all", getAllTests);
+
+// ********************* Notification Module ****************************
+route.post("/notification/create", createNotification);
+route.delete("/notification/destroy", destroyNotification);
 
 module.exports = route;
