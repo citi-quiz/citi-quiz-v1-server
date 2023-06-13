@@ -1,4 +1,5 @@
 const Pig = require("pigcolor");
+const emailValidator = require("deep-email-validator");
 const User = require("../modules/user");
 const { v4: uuidv4 } = require("uuid");
 var nodemailer = require("nodemailer");
@@ -96,6 +97,13 @@ exports.createUser = async (req, res) => {
   newUser.email_verified = "false";
   newUser.verificationCode = vcode;
 
+  // const { valid, reason, validators } = await emailValidator.validate(
+  //   req.body.data.email
+  // );
+  // console.log("email - ", req.body.data.email);
+  // console.log("isUserEmailValid - ", valid, reason, validators);
+  // if (!valid) return res.send("Email is not valid. Please try again!");
+  // else console.log("Valid Email");
   // const newBookmark = new Bookmark();
   // newBookmark.bookmarkId = uuidv4();
   // newBookmark.bookmarkName = "bookmark" + bfcode;
