@@ -126,10 +126,30 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
     }
     console.log(user.reviewBookmarkIndex);
     console.log(req.params.setId);
+    console.log(req.params.setCategory);
+    console.log("Bookmark List Length - ", user.reviewBookmarkIndex.length);
     if (user.reviewBookmarkIndex.length === 0) {
-      return res.json({
-        user: user,
-      });
+      Question.find({
+        setUnder: req.params.setId,
+      })
+        .then((allQuestions, err) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+          return res.json({
+            allQuestions: allQuestions,
+            currentQuestionIndex: 0,
+          });
+        })
+        .catch((err) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          }
+        });
     } else {
       const findSet = [...user.reviewBookmarkIndex];
       const findSetIndex = findSet.findIndex(
