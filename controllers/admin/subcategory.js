@@ -124,89 +124,153 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
         error: err,
       });
     }
-    console.log(user.reviewBookmarkIndex);
+    console.log(user.reviewBookmarkIndex.length);
     console.log(req.params.setId);
-    console.log(req.params.setCategory);
-    console.log("Bookmark List Length - ", user.reviewBookmarkIndex.length);
-    if (user.reviewBookmarkIndex.length === 0) {
+
+    if(user.reviewBookmarkIndex.length === 0){
       Question.find({
-        setUnder: req.params.setId,
-      })
-        .then((allQuestions, err) => {
-          if (err) {
-            return res.status(400).json({
-              error: err,
-            });
-          }
-          return res.json({
-            allQuestions: allQuestions,
-            currentQuestionIndex: 0,
-          });
-        })
-        .catch((err) => {
-          if (err) {
-            return res.status(400).json({
-              error: err,
-            });
-          }
-        });
-    } else {
-      const findSet = [...user.reviewBookmarkIndex];
-      const findSetIndex = findSet.findIndex(
-        (b) => b.setId === req.params.setId
-      );
-      const findSetIndexInfo = findSet.filter(
-        (b) => b.setId === req.params.setId
-      );
-      console.log(findSetIndexInfo);
-      if (req.params.setCategory === "all") {
-        Question.find({
-          setUnder: req.params.setId,
-        })
-          .then((allQuestions, err) => {
-            if (err) {
-              return res.status(400).json({
-                error: err,
+              setUnder: req.params.setId,
+            })
+              .then((allQuestions, err) => {
+                if (err) {
+                  return res.status(400).json({
+                    error: err,
+                  });
+                }
+                return res.json({
+                  allQuestions: allQuestions,
+                  currentQuestionIndex: 0,
+                });
+              })
+              .catch((err) => {
+                if (err) {
+                  return res.status(400).json({
+                    error: err,
+                  });
+                }
               });
-            }
-            return res.json({
-              allQuestions: allQuestions,
-              currentQuestionIndex: 0,
-            });
-          })
-          .catch((err) => {
-            if (err) {
-              return res.status(400).json({
-                error: err,
-              });
-            }
-          });
-      } else {
-        console.log("not all");
-        Question.find({
-          questionCategory: req.params.setCategory,
-          setUnder: req.params.setId,
-        })
-          //   .skip(findSetIndexInfo[0].reviewBookmarkIndex)
-          .then((allQuestions, err) => {
-            if (err) {
-              return res.status(400).json({
-                error: err,
-              });
-            }
-            return res.json({
-              allQuestions: allQuestions,
-              currentQuestionIndex: findSetIndexInfo[0].reviewBookmarkIndex,
-            });
-          })
-          .catch((err) => {
-            if (err) {
-              return res.status(400).json({
-                error: err,
-              });
-            }
-          });
-      }
     }
+    else if(user.reviewBookmarkIndex.length > 0){
+      const findSet = [...user.reviewBookmarkIndex];
+        const findSetIndex = findSet.findIndex(
+          (b) => b.setId === req.params.setId
+        );
+        const findSetIndexInfo = findSet.filter(
+          (b) => b.setId === req.params.setId
+        );
+        console.log(findSetIndexInfo);
+        if (req.params.setCategory === "all") {
+          Question.find({
+            setUnder: req.params.setId,
+          })
+            .then((allQuestions, err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+              return res.json({
+                allQuestions: allQuestions,
+                currentQuestionIndex: 0,
+              });
+            })
+            .catch((err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+            });
+        } else {
+          console.log("not all");
+          Question.find({
+            questionCategory: req.params.setCategory,
+            setUnder: req.params.setId,
+          })
+            //   .skip(findSetIndexInfo[0].reviewBookmarkIndex)
+            .then((allQuestions, err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+              return res.json({
+                allQuestions: allQuestions,
+                currentQuestionIndex: findSetIndexInfo[0].reviewBookmarkIndex,
+              });
+            })
+            .catch((err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+            });
+    }
+  }
+
+
+    // if (user.reviewBookmarkIndex.length === 0) {
+    //   return res.json({
+    //     user: user,
+    //   });
+    // } else {
+    //   const findSet = [...user.reviewBookmarkIndex];
+    //   const findSetIndex = findSet.findIndex(
+    //     (b) => b.setId === req.params.setId
+    //   );
+    //   const findSetIndexInfo = findSet.filter(
+    //     (b) => b.setId === req.params.setId
+    //   );
+    //   console.log(findSetIndexInfo);
+    //   if (req.params.setCategory === "all") {
+    //     Question.find({
+    //       setUnder: req.params.setId,
+    //     })
+    //       .then((allQuestions, err) => {
+    //         if (err) {
+    //           return res.status(400).json({
+    //             error: err,
+    //           });
+    //         }
+    //         return res.json({
+    //           allQuestions: allQuestions,
+    //           currentQuestionIndex: 0,
+    //         });
+    //       })
+    //       .catch((err) => {
+    //         if (err) {
+    //           return res.status(400).json({
+    //             error: err,
+    //           });
+    //         }
+    //       });
+    //   } else {
+    //     console.log("not all");
+    //     Question.find({
+    //       questionCategory: req.params.setCategory,
+    //       setUnder: req.params.setId,
+    //     })
+    //       //   .skip(findSetIndexInfo[0].reviewBookmarkIndex)
+    //       .then((allQuestions, err) => {
+    //         if (err) {
+    //           return res.status(400).json({
+    //             error: err,
+    //           });
+    //         }
+    //         return res.json({
+    //           allQuestions: allQuestions,
+    //           currentQuestionIndex: findSetIndexInfo[0].reviewBookmarkIndex,
+    //         });
+    //       })
+    //       .catch((err) => {
+    //         if (err) {
+    //           return res.status(400).json({
+    //             error: err,
+    //           });
+    //         }
+    //       });
+    //   }
+    // }
   });
 };
