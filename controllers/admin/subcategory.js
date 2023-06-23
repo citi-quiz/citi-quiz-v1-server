@@ -118,6 +118,7 @@ exports.getASubCategory = (req, res) => {
 exports.getQuestionsAllInSetCategory = (req, res) => {
   const reviewIndex = req.params.index;
   Pig.box("GET ALL: Questions from Subcategory");
+  console.log("allparams - ", req.params);
   User.findOne({ _id: req.params.userId }).then((user, err) => {
     if (err) {
       return res.status(400).json({
@@ -130,6 +131,7 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
     if(user.reviewBookmarkIndex.length === 0){
       Question.find({
               setUnder: req.params.setId,
+              questionCategory: req.params.setCategory
             })
               .then((allQuestions, err) => {
                 if (err) {
@@ -158,7 +160,59 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
         const findSetIndexInfo = findSet.filter(
           (b) => b.setId === req.params.setId
         );
-        console.log(findSetIndexInfo);
+        console.log('findSetIndexInfo - ', findSetIndexInfo);
+        if(findSetIndexInfo.length > 0 ){
+          Question.find({
+            questionCategory: req.params.setCategory,
+            setUnder: req.params.setId,
+          })
+            //   .skip(findSetIndexInfo[0].reviewBookmarkIndex)
+            .then((allQuestions, err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+              return res.json({
+                allQuestions: allQuestions,
+                currentQuestionIndex: findSetIndexInfo[0].reviewBookmarkIndex,
+              });
+            })
+            .catch((err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+            });
+        }
+        else{
+          Question.find({
+            setUnder: req.params.setId,
+            questionCategory: req.params.setCategory
+
+          })
+            .then((allQuestions, err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+              return res.json({
+                allQuestions: allQuestions,
+                currentQuestionIndex: 0,
+              });
+            })
+            .catch((err) => {
+              if (err) {
+                return res.status(400).json({
+                  error: err,
+                });
+              }
+            });
+        }
+
+
         if (req.params.setCategory === "all") {
           Question.find({
             setUnder: req.params.setId,
@@ -189,6 +243,7 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
           })
             //   .skip(findSetIndexInfo[0].reviewBookmarkIndex)
             .then((allQuestions, err) => {
+              console.log("allQuestions - ", allQuestions, err);
               if (err) {
                 return res.status(400).json({
                   error: err,
@@ -200,8 +255,9 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
               });
             })
             .catch((err) => {
+              console.log("allQuestions - catch", err);
               if (err) {
-                return res.status(400).json({
+                return ({
                   error: err,
                 });
               }
@@ -247,29 +303,7 @@ exports.getQuestionsAllInSetCategory = (req, res) => {
     //       });
     //   } else {
     //     console.log("not all");
-    //     Question.find({
-    //       questionCategory: req.params.setCategory,
-    //       setUnder: req.params.setId,
-    //     })
-    //       //   .skip(findSetIndexInfo[0].reviewBookmarkIndex)
-    //       .then((allQuestions, err) => {
-    //         if (err) {
-    //           return res.status(400).json({
-    //             error: err,
-    //           });
-    //         }
-    //         return res.json({
-    //           allQuestions: allQuestions,
-    //           currentQuestionIndex: findSetIndexInfo[0].reviewBookmarkIndex,
-    //         });
-    //       })
-    //       .catch((err) => {
-    //         if (err) {
-    //           return res.status(400).json({
-    //             error: err,
-    //           });
-    //         }
-    //       });
+  
     //   }
     // }
   });
