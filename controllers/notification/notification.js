@@ -32,14 +32,13 @@ const sendGmailToUser = async (userEmails, makeSetLink, title) => {
     secure: true,
     auth: {
       type: "OAuth2",
-      user: "help.citi.quiz@gmail.com",
+      user: process.env.EMAIL_FROM,
       clientId:
-        "533381035374-imqb0tj97mpao8fqcv65g538pl3qhmtq.apps.googleusercontent.com",
-      clientSecret: "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",
-      refreshToken:
-        "1//04_7bubdZ5yl2CgYIARAAGAQSNwF-L9IrPYZHn00iakuwzX9eyMjXTjqhfFS8fH16LFnFbzbE1OWA5NT_E_4Q5AlmLGW5ldIQcbw",
+      process.env.EMAIL_clientId,
+      clientSecret: process.env.EMAIL_clientSecret,
+      refreshToken:process.env.EMAIL_refreshToken,
       accessToken:
-        "ya29.a0AWY7CknZstkk_lOJqA1J3vtFeMahocXgkb34FQ90WMpPCx9h3uRk4GnvIcMNp5sej5Fz91f-dD_noCrNLgOJI2VKpy8tj3_xzz7xhTaFEA603laYOYehLVCh2r22MhnMaP30FvfdHlSGDD9oF0lZlzKes1a1aCgYKARYSARASFQG1tDrpOuWUSRUSNJk9D5RMYszmsg0163",
+        process.env.EMAIL_accessToken,
     },
     tls: {
       rejectUnauthorized: false
@@ -99,8 +98,8 @@ exports.createNotification = async (req, res) => {
       notification.notificationLink = req.body.set;
       // Send email to all
       const sendEmailRes = await sendGmailToUser(allUserEmails,makeSetLink, req.body.title)
-        .then((res) => {
-          console.log("Email Send!!!", res);
+        .then((emailres) => {
+          console.log("Email Send!!!", emailres);
           notification.save().then((notify, err) => {
             if(err){
               return res.status(400).json({
@@ -111,9 +110,7 @@ exports.createNotification = async (req, res) => {
               notify: notify
             })
         }).catch((err) => {
-              return res.status(400).json({
-                error: err
-              })
+            console.log(err);
         });
           return ({
             email: "All Done",
