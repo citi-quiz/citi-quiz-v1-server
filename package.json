@@ -29,6 +29,7 @@
                 "https": "^1.0.0",
                 "mongoose": "^7.0.2",
                 "nodemailer": "^6.9.1",
+                "passport-google-oauth20": "^2.0.0",
                 "pigcolor": "^1.0.4",
                 "uuid": "^9.0.0"
         }
