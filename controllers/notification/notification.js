@@ -33,13 +33,13 @@ const sendGmailToUser = async (userEmails, makeSetLink, title) => {
     secure: true,
     auth: {
       type: "OAuth2",
-      user: process.env.EMAIL_FROM,
+      user: "help.citi.quiz@gmail.com",
       clientId:
-      process.env.EMAIL_clientId,
-      clientSecret: process.env.EMAIL_clientSecret,
-      refreshToken:process.env.EMAIL_refreshToken,
+      "533381035374-imqb0tj97mpao8fqcv65g538pl3qhmtq.apps.googleusercontent.com",
+      clientSecret: "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",
+      refreshToken:"1//04v7TDxEseXr0CgYIARAAGAQSNwF-L9IriMzJc7YEX8MofJ1O-7psBNtk9uAHX9Ucq5WYVbpOdmvqggxf00d4g3B_qFlYANIK_E0",
       accessToken:
-        process.env.EMAIL_accessToken,
+        "ya29.a0AWY7CkmX3n6tnBZ2O0CkexayVJQEYcGXdvm9Mv1wKUEu9Oab2mailz2loZDJPHVL572ZZN7_I0TuEXA8Dc8cPQShmr2gtZnKVQenkka-3GUSofgAu6ZfbAcqih0SwZvwUfDIje6s7d24btW_lHN5ySX3y7EJaCgYKAXoSARASFQG1tDrpqW9UhuQ8jvF7pxjK0ZF7Bw0163",
     },
     tls: {
       rejectUnauthorized: false
