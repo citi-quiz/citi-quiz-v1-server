@@ -38,7 +38,8 @@ const { initializeTest, getAllTests } = require("../controllers/test");
 const {
   createNotification,
   destroyNotification,
-  getAllNotifications
+  getAllNotifications,
+  deleteNotification
 } = require("../controllers/notification/notification");
 const route = express.Router();
 
@@ -99,5 +100,7 @@ route.get("/test/get/all", getAllTests);
 route.post("/notification/create", createNotification);
 route.delete("/notification/destroy", destroyNotification);
 route.get("/get/all/notification", getAllNotifications);
+route.delete("/notification/delete", deleteNotification);
+
 
 module.exports = route;

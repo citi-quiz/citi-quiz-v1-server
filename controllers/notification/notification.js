@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const user = require("../../modules/user");
 const Notification = require("../../modules/notification");
 const { v4: uuidv4 } = require("uuid");
+const notification = require("../../modules/notification");
 require("dotenv").config();
 
 
@@ -135,3 +136,29 @@ exports.createNotification = async (req, res) => {
 exports.destroyNotification = (req, res) => {
   Pig.box("Destroy Notification");
 };
+
+
+exports.deleteNotification = (req, res) => {
+  Pig.box("Delete Notification");
+  console.log("Req ", req.body);
+  if(req.body.notifiId)
+  Notification.findByIdAndDelete({ _id: req.body.notifiId._id}).then((notifi, err) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    return res.json({
+      msg: "Deleted"
+    })
+  }).catch((err) => {
+    res.json({
+      error: err
+    })
+  })
+  else{
+    return res.json({
+      msg: "Notification ID is empty"
+    })
+  }
+}
