@@ -6,6 +6,7 @@ const {
   getAllSubCategory,
   getASubCategory,
   getQuestionsAllInSetCategory,
+  getAllSubCategoryAvailablity,
 } = require("../controllers/admin/subcategory");
 const {
   createSets,
@@ -49,6 +50,7 @@ route.put("/setcategory/update", updateSetCategory);
 route.delete("/setcategory/delete", deleteSetCategory);
 
 route.get("/setcategory/get/all", getAllSubCategory);
+route.get("/setcategory/get/availability/:setId", getAllSubCategoryAvailablity);
 route.get("/setcategory/get/a/:subcategoryId", getASubCategory);
 
 // ******************** Sets *************************
