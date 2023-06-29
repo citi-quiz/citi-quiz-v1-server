@@ -98,29 +98,30 @@ exports.createNotification = async (req, res) => {
       notification.notificationDescription = req.body.message;
       notification.notificationLink = req.body.set;
       // Send email to all
-      const sendEmailRes = await sendGmailToUser(allUserEmails,makeSetLink, req.body.title)
-        .then((emailres) => {
-          console.log("Email Send!!!", emailres);
-          notification.save().then((notify, err) => {
-            if(err){
-              return res.status(400).json({
-                error: err
-              })
-            }
-            return res.json({
-              notify: notify
-            })
-        }).catch((err) => {
-            console.log(err);
-        });
-          return ({
-            email: "All Done",
-            to: allNotify,
-          });
+      notification.save().then((notify, err) => {
+        if(err){
+          return res.status(400).json({
+            error: err
+          })
+        }
+        return res.json({
+          notify: notify
         })
-        .catch((err) => {
-          console.log(err);
-        });
+    }).catch((err) => {
+        console.log(err);
+    });
+      // const sendEmailRes = await sendGmailToUser(allUserEmails,makeSetLink, req.body.title)
+      //   .then((emailres) => {
+      //     console.log("Email Send!!!", emailres);
+       
+      //     return ({
+      //       email: "All Done",
+      //       to: allNotify,
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     
       
     })

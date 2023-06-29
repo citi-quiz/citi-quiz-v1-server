@@ -374,7 +374,8 @@ exports.addQuestionToBookmark = (req, res) => {
   const userId = req.body.userId.value;
   const bookmarkIndex = req.body.bookbarkIndex;
   const setId = req.body.setId;
-
+  const category = req.body.question.questionCategory;
+  
   User.findOne({ _id: userId }).then((user, err) => {
     if (err) {
       return res.status(400).json({
@@ -396,6 +397,7 @@ exports.addQuestionToBookmark = (req, res) => {
       let bookmarkIndexObject = {
         setId: setId,
         reviewBookmarkIndex: bookmarkIndex,
+        category: category
       };
       var userReviewIndexTemp = [...user.reviewBookmarkIndex];
       userReviewIndexTemp.push(bookmarkIndexObject);
@@ -422,12 +424,15 @@ exports.addQuestionToBookmark = (req, res) => {
         });
     } else {
       const setIdExist = user.reviewBookmarkIndex.filter(
-        (q) => q.setId === setId
+        (q) => (q.setId === setId) && (q.category === category)
       );
+      console.log('setIdExist',setIdExist);
       if (setIdExist.length === 0) {
         let bookmarkIndexObject = {
           setId: setId,
           reviewBookmarkIndex: bookmarkIndex,
+          category: category
+
         };
         var userReviewIndexTemp = [...user.reviewBookmarkIndex];
         userReviewIndexTemp.push(bookmarkIndexObject);
@@ -452,12 +457,16 @@ exports.addQuestionToBookmark = (req, res) => {
             }
           });
       }
+      else{
       const setIdExistIndex = user.reviewBookmarkIndex.findIndex(
-        (q) => q.setId === setId
+        (q) => (q.setId === setId) && (q.category === category)
       );
+      console.log('setIdExistIndex',setIdExistIndex,bookmarkIndex);
+
       let bookmarkIndexObject = {
         setId: setId,
         reviewBookmarkIndex: bookmarkIndex,
+        category: category
       };
       var userReviewIndexTemp = [...user.reviewBookmarkIndex];
       userReviewIndexTemp[setIdExistIndex] = bookmarkIndexObject;
@@ -482,6 +491,7 @@ exports.addQuestionToBookmark = (req, res) => {
           }
         });
     }
+  }
 
     // const isQuestionExist = user.bookmarks.filter((q) => q === questionId);
     // console.log(isQuestionExist);
