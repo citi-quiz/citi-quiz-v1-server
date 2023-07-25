@@ -1,6 +1,6 @@
-const Pig = require('pigcolor');
-const Sets = require('../modules/sets');
-const { v4: uuidv4 } = require('uuid');
+const Pig = require("pigcolor");
+const Sets = require("../modules/sets");
+const { v4: uuidv4 } = require("uuid");
 
 exports.createSets = (req, res) => {
     Pig.box("CREATE: Sets");
@@ -11,22 +11,49 @@ exports.createSets = (req, res) => {
     newSets.setCategory = req.body.setCategory;
     newSets.setTitle = req.body.setTitle;
     newSets.setDifficulty = req.body.setDifficulty;
-    newSets.save()
+    newSets
+        .save()
         .then((sets, err) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
-                })
+                    error: err,
+                });
             }
             return res.json({
-                sets: sets
-            })
+                sets: sets,
+            });
         })
-        .catch(err => {
+        .catch((err) => {
             return res.status(400).json({
+                error: err,
+            });
+        });
+};
+
+exports.editSets = (req, res) => {
+    console.log("Edit Sets - ", req.body.set.setNameEdit);
+    console.log("Edit Sets Ids - ", req.body.set.setNameId);
+    Sets.updateOne({ _id: req.body.set.setNameId._id }, {
+        $set: {
+            'setName': req.body.set.setNameEdit
+        }
+    }).then((sets, err) => {
+        if (err) {
+            return res.json({
                 error: err
             })
+        }
+        if (!sets) {
+            return res.json({
+                error: "No Sets Empty"
+            })
+        }
+        return res.json({
+            sets: sets
         })
+    }).catch((error) => {
+        console.log("Error - ", error);
+    });
 }
 
 exports.updateSets = (req, res) => {
@@ -35,7 +62,7 @@ exports.updateSets = (req, res) => {
         .then((sets, err) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
+                    error: err,
                 });
             }
             sets.setId = req.body.setId;
@@ -46,29 +73,101 @@ exports.updateSets = (req, res) => {
             sets.setDifficulty = req.body.setDifficulty;
             sets.setikes = req.body.setikes;
             sets.setQuestions = req.body.setQuestions;
-            sets.save()
+            sets
+                .save()
                 .then((newsets, err) => {
                     if (err) {
                         return res.status(400).json({
-                            error: err
+                            error: err,
                         });
                     }
                     return res.json({
-                        sets: newsets
-                    })
+                        sets: newsets,
+                    });
                 })
                 .catch((err) => {
                     return res.status(400).json({
-                        error: err
+                        error: err,
                     });
                 });
-
-        }).catch(err => {
+        })
+        .catch((err) => {
             return res.status(400).json({
-                error: err
+                error: err,
             });
         });
-}
+};
+
+exports.disableSets = (req, res) => {
+    Pig.box("DISABLE: Sets");
+    const setId = req.body._id;
+    Sets.findById({ _id: req.body._id })
+        .then((sets, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err,
+                });
+            }
+            sets.setId = req.body.setId;
+            sets.setName = req.body.setName;
+            sets.setDescription = "Disable";
+            sets.setCategory = req.body.setCategory;
+            sets.setTitle = req.body.setTitle;
+            sets.setDifficulty = req.body.setDifficulty;
+            sets.setikes = req.body.setikes;
+            sets.setQuestions = req.body.setQuestions;
+            sets.save().then((newsets, err) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err,
+                    });
+                }
+                return res.json({
+                    sets: newsets,
+                });
+            });
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err,
+            });
+        });
+};
+
+exports.enableSets = (req, res) => {
+    Pig.box("Enable: Sets");
+    Sets.findById({ _id: req.body._id })
+        .then((sets, err) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err,
+                });
+            }
+            sets.setId = req.body.setId;
+            sets.setName = req.body.setName;
+            sets.setDescription = "Enable";
+            sets.setCategory = req.body.setCategory;
+            sets.setTitle = req.body.setTitle;
+            sets.setDifficulty = req.body.setDifficulty;
+            sets.setikes = req.body.setikes;
+            sets.setQuestions = req.body.setQuestions;
+            sets.save().then((newsets, err) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err,
+                    });
+                }
+                return res.json({
+                    sets: newsets,
+                });
+            });
+        })
+        .catch((err) => {
+            return res.status(400).json({
+                error: err,
+            });
+        });
+};
 
 exports.deleteSets = (req, res) => {
     Pig.box("DELETE: Sets");
@@ -76,19 +175,19 @@ exports.deleteSets = (req, res) => {
         .then((newsets, err) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
+                    error: err,
                 });
             }
             return res.json({
-                sets: newsets
-            })
+                sets: newsets,
+            });
         })
-        .catch(err => {
+        .catch((err) => {
             return res.status(400).json({
-                error: err
+                error: err,
             });
         });
-}
+};
 
 exports.getAllSets = (req, res) => {
     Pig.box("GET All: Sets");
@@ -96,19 +195,19 @@ exports.getAllSets = (req, res) => {
         .then((allSets, err) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
+                    error: err,
                 });
             }
             return res.json({
-                sets: allSets
-            })
+                sets: allSets,
+            });
         })
-        .catch(err => {
+        .catch((err) => {
             return res.status(400).json({
-                error: err
-            });;
-        })
-}
+                error: err,
+            });
+        });
+};
 
 exports.getASets = (req, res) => {
     Pig.box("GET A: Sets");
@@ -116,19 +215,19 @@ exports.getASets = (req, res) => {
         .then((allSets, err) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
+                    error: err,
                 });
             }
             return res.json({
-                sets: allSets
-            })
+                sets: allSets,
+            });
         })
-        .catch(err => {
+        .catch((err) => {
             return res.status(400).json({
-                error: err
-            });;
-        })
-}
+                error: err,
+            });
+        });
+};
 
 exports.getAllSetsByCategory = (req, res) => {
     Pig.box("GET ALL BY: Category");
@@ -136,16 +235,16 @@ exports.getAllSetsByCategory = (req, res) => {
         .then((allSets, err) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
+                    error: err,
                 });
             }
             return res.json({
-                allSets: allSets
-            })
+                allSets: allSets,
+            });
         })
         .catch((err) => {
             return res.status(400).json({
-                error: err
-            })
+                error: err,
+            });
         });
-}
+};
