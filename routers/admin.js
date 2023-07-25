@@ -1,46 +1,47 @@
 const express = require("express");
 const {
-  createSetCategory,
-  updateSetCategory,
-  deleteSetCategory,
-  getAllSubCategory,
-  getASubCategory,
-  getQuestionsAllInSetCategory,
-  getAllSubCategoryAvailablity,
+    createSetCategory,
+    updateSetCategory,
+    deleteSetCategory,
+    getAllSubCategory,
+    getASubCategory,
+    getQuestionsAllInSetCategory,
+    getAllSubCategoryAvailablity,
 } = require("../controllers/admin/subcategory");
 const {
-  createSets,
-  updateSets,
-  deleteSets,
-  getAllSets,
-  getASets,
-  getAllSetsByCategory,
-  disableSets,
-  enableSets,
+    createSets,
+    updateSets,
+    deleteSets,
+    getAllSets,
+    getASets,
+    getAllSetsByCategory,
+    disableSets,
+    enableSets,
+    editSets,
 } = require("../controllers/sets");
 const {
-  createQuestion,
-  getAllQuestions,
-  getAQuestion,
-  getQuestionAsSet,
-  getQuestionsAllInSet,
-  addQuestionToFavroits,
-  getAllFavQuestions,
-  removeQuestionToFavroits,
-  addQuestionToBookmark,
-  removeQuestionToBookmark,
-  getAllBookmarkQuestions,
-  deleteQuestion,
-  updateQuestion,
-  getAllFavQuestionsUderSet,
-  getQuestionAsSetIndexBased,
+    createQuestion,
+    getAllQuestions,
+    getAQuestion,
+    getQuestionAsSet,
+    getQuestionsAllInSet,
+    addQuestionToFavroits,
+    getAllFavQuestions,
+    removeQuestionToFavroits,
+    addQuestionToBookmark,
+    removeQuestionToBookmark,
+    getAllBookmarkQuestions,
+    deleteQuestion,
+    updateQuestion,
+    getAllFavQuestionsUderSet,
+    getQuestionAsSetIndexBased,
 } = require("../controllers/questions");
 const { initializeTest, getAllTests } = require("../controllers/test");
 const {
-  createNotification,
-  destroyNotification,
-  getAllNotifications,
-  deleteNotification
+    createNotification,
+    destroyNotification,
+    getAllNotifications,
+    deleteNotification
 } = require("../controllers/notification/notification");
 const route = express.Router();
 
@@ -55,6 +56,7 @@ route.get("/setcategory/get/a/:subcategoryId", getASubCategory);
 
 // ******************** Sets *************************
 route.post("/sets/create", createSets);
+route.put("/set/edit", editSets);
 route.post("/sets/disable", disableSets);
 route.post("/sets/enable", enableSets);
 route.put("/sets/update/:sId", updateSets);
@@ -71,8 +73,8 @@ route.delete("/question/delete", deleteQuestion);
 
 route.get("/question/get/all/set/:setId", getQuestionsAllInSet);
 route.get(
-  "/question/get/all/set/under/:setId/category/:setCategory/review/:userId",
-  getQuestionsAllInSetCategory
+    "/question/get/all/set/under/:setId/category/:setCategory/review/:userId",
+    getQuestionsAllInSetCategory
 );
 route.get("/question/get/all", getAllQuestions);
 route.get("/question/get/a/:qId", getAQuestion);
@@ -80,8 +82,8 @@ route.get("/question/get/a/:qId", getAQuestion);
 // ?? Special Queries
 route.get("/question/get/set/:setId/generate", getQuestionAsSet);
 route.get(
-  "/question/get/set/:setId/generate/index/:ind",
-  getQuestionAsSetIndexBased
+    "/question/get/set/:setId/generate/index/:ind",
+    getQuestionAsSetIndexBased
 );
 route.post("/question/add/user", addQuestionToFavroits);
 route.post("/question/add/bookmark/user", addQuestionToBookmark);
@@ -89,8 +91,8 @@ route.post("/question/remove/bookmark/user", removeQuestionToBookmark);
 route.post("/question/remove/user", removeQuestionToFavroits);
 route.get("/question/get/all/fav/user/:userId", getAllFavQuestions);
 route.get(
-  "/question/get/all/fav/setunder/:setId/user/:userId",
-  getAllFavQuestionsUderSet
+    "/question/get/all/fav/setunder/:setId/user/:userId",
+    getAllFavQuestionsUderSet
 );
 route.get("/question/get/all/bookmark/user/:userId", getAllBookmarkQuestions);
 
