@@ -1,5 +1,5 @@
 const express = require('express');
-const { isUserExist, createUser, verifyUserCode, loginUser, getAllUsers, getAUser, extractAllUserDetails } = require('../controllers/user');
+const { isUserExist, createUser, verifyUserCode, loginUser, getAllUsers, getAUser, extractAllUserDetails, deleteAUser } = require('../controllers/user');
 const { sendVerificationCode } = require('../controllers/email/email');
 const route = express.Router();
 
@@ -17,6 +17,10 @@ route.post("/user/verify", verifyUserCode);
 route.get("/get/all/users", getAllUsers);
 route.get("/get/a/user/:userId", getAUser);
 route.get("/get/all/info/user/:userId", extractAllUserDetails);
+
+// ?? User Controls
+route.delete("/delete/user/:userID", deleteAUser);
+
 
 // ?? All Test and Questionary Section 
 
